@@ -1,15 +1,13 @@
-# Plaid
+# 老司机
+Android客户端
 
-<img src="screenshots/plaid_demo.gif" width="400" align="right" hspace="20">
 
-*Design news and inspiration.*
 
-老司机Android客户端
 
 
 ### Screenshots
 
-
+<img src="screenshots/plaid_demo.gif" width="240" hspace="20">
 
 
 
