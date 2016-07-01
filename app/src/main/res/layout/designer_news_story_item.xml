@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 
-<io.plaidapp.ui.widget.FourThreeLinearLayout
+<com.olddriver.ui.widget.FourThreeLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/story_title_background"
@@ -28,7 +28,7 @@
     android:stateListAnimator="@animator/raise"
     android:theme="@style/PlaidDarkOverlay">
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/story_title"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -57,7 +57,7 @@
             android:src="@drawable/ic_pocket"/>
 
         <!-- Using a TextView rather than a button to have better control over the padding -->
-        <io.plaidapp.ui.widget.BaselineGridTextView
+        <com.olddriver.ui.widget.BaselineGridTextView
             android:id="@+id/story_comments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,4 +74,4 @@
 
     </FrameLayout>
 
-</io.plaidapp.ui.widget.FourThreeLinearLayout>
+</com.olddriver.ui.widget.FourThreeLinearLayout>

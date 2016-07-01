@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 
-<io.plaidapp.ui.widget.FourThreeLinearLayout
+<com.olddriver.ui.widget.FourThreeLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,7 +25,7 @@
     android:elevation="@dimen/z_card"
     android:stateListAnimator="@animator/raise">
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/hunt_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         android:breakStrategy="simple"
         style="@style/Widget.Plaid.TilePrimary" />
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/tagline"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -49,7 +49,7 @@
         android:breakStrategy="simple"
         style="@style/Widget.Plaid.TileSecondary" />
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/story_comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,4 +62,4 @@
         android:padding="@dimen/spacing_normal"
         style="@style/Widget.Plaid.TileSecondary" />
 
-</io.plaidapp.ui.widget.FourThreeLinearLayout>
+</com.olddriver.ui.widget.FourThreeLinearLayout>

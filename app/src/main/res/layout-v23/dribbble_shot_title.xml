@@ -23,7 +23,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:showIn="@layout/dribbble_shot_description">
 
-    <io.plaidapp.ui.widget.FabOverlapTextView
+    <com.olddriver.ui.widget.FabOverlapTextView
         android:id="@+id/shot_title"
         android:layout_columnSpan="3"
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
         tools:text="Dribbble shot title"
         style="@style/Widget.Plaid.DribbbleShotTitle" />
 
-    <io.plaidapp.ui.widget.FabOverlapTextView
+    <com.olddriver.ui.widget.FabOverlapTextView
         android:id="@+id/shot_description"
         android:layout_columnSpan="3"
         android:paddingStart="@dimen/padding_normal"

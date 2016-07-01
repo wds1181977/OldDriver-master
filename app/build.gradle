@@ -36,12 +36,12 @@ android {
     buildToolsVersion '23.0.2'
 
     defaultConfig {
-        applicationId "io.plaidapp"
+        applicationId "com.olddriver"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode gitCommitCount
         versionName gitTag
-        archivesBaseName = "plaid-${versionName}"
+        archivesBaseName = "OldDriver-${versionName}"
         resConfig "en"
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "DRIBBBLE_CLIENT_ID", "\"${dribbble_client_id}\""

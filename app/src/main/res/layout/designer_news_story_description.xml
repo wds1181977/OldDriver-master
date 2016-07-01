@@ -25,7 +25,7 @@
     android:background="@color/designer_news_story_comment_background"
     android:orientation="vertical">
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/story_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <io.plaidapp.ui.widget.BaselineGridTextView
+        <com.olddriver.ui.widget.BaselineGridTextView
             android:id="@+id/story_vote_action"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <io.plaidapp.ui.widget.BaselineGridTextView
+        <com.olddriver.ui.widget.BaselineGridTextView
             android:id="@+id/story_share_action"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
         android:paddingBottom="@dimen/padding_normal"
         android:orientation="horizontal">
 
-        <io.plaidapp.ui.widget.BaselineGridTextView
+        <com.olddriver.ui.widget.BaselineGridTextView
             android:id="@+id/story_poster_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
             android:textAppearance="@style/TextAppearance.CommentTimestamp"
             tools:text="Nick B, Designer+Developer @ Google" />
 
-        <io.plaidapp.ui.widget.CircularImageView
+        <com.olddriver.ui.widget.CircularImageView
             android:id="@+id/story_poster_avatar"
             android:layout_width="@dimen/avatar_bounds"
             android:layout_height="@dimen/avatar_bounds"

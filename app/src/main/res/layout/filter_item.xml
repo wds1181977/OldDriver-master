@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 
-<io.plaidapp.ui.widget.ForegroundLinearLayout
+<com.olddriver.ui.widget.ForegroundLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         android:padding="@dimen/spacing_micro"
         android:src="@drawable/filter_placeholder" />
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/filter_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,4 +45,4 @@
         android:stateListAnimator="@animator/filter_active"
         tools:text="Popular Designer News"/>
 
-</io.plaidapp.ui.widget.ForegroundLinearLayout>
+</com.olddriver.ui.widget.ForegroundLinearLayout>

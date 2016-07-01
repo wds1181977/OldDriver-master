@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 
-<io.plaidapp.ui.widget.ForegroundRelativeLayout
+<com.olddriver.ui.widget.ForegroundRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -29,7 +29,7 @@
     android:background="@color/background_light"
     android:stateListAnimator="@animator/raise">
 
-    <io.plaidapp.ui.widget.CircularImageView
+    <com.olddriver.ui.widget.CircularImageView
         android:id="@+id/player_avatar"
         android:layout_width="@dimen/avatar_bounds"
         android:layout_height="@dimen/avatar_bounds"
@@ -40,7 +40,7 @@
         android:padding="@dimen/avatar_padding"
         android:src="@drawable/avatar_placeholder" />
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/time_ago"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         android:textAppearance="@style/TextAppearance.CommentTimestamp"
         tools:text="3 hours ago" />
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/player_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
         android:textAppearance="@style/TextAppearance.CommentAuthor.Dribbble"
         tools:text="Nick B" />
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/player_bio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -76,4 +76,4 @@
         tools:text="Blah blah blah blah blah blah blah blah blah blah blah blah blah"
         style="@style/Widget.Plaid.Comment" />
 
-</io.plaidapp.ui.widget.ForegroundRelativeLayout>
+</com.olddriver.ui.widget.ForegroundRelativeLayout>

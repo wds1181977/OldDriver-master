@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 
-<io.plaidapp.ui.widget.BottomSheet
+<com.olddriver.ui.widget.BottomSheet
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -34,7 +34,7 @@
         android:orientation="vertical"
         android:transitionName="@string/transition_new_designer_news_post">
 
-        <io.plaidapp.ui.widget.BaselineGridTextView
+        <com.olddriver.ui.widget.BaselineGridTextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:background="@color/background_light"
             style="@style/Widget.Plaid.DialogTitle" />
 
-        <io.plaidapp.ui.widget.ObservableScrollView
+        <com.olddriver.ui.widget.ObservableScrollView
             android:id="@+id/scroll_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <io.plaidapp.ui.widget.BaselineGridTextView
+                <com.olddriver.ui.widget.BaselineGridTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/padding_normal"
@@ -87,7 +87,7 @@
 
                 </android.support.design.widget.TextInputLayout>
 
-                <io.plaidapp.ui.widget.BaselineGridTextView
+                <com.olddriver.ui.widget.BaselineGridTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_normal"
@@ -152,8 +152,8 @@
 
             </LinearLayout>
 
-        </io.plaidapp.ui.widget.ObservableScrollView>
+        </com.olddriver.ui.widget.ObservableScrollView>
 
     </LinearLayout>
 
-</io.plaidapp.ui.widget.BottomSheet>
+</com.olddriver.ui.widget.BottomSheet>

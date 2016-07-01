@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 
-<io.plaidapp.ui.widget.ElasticDragDismissFrameLayout
+<com.olddriver.ui.widget.ElasticDragDismissFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,7 +27,7 @@
     android:transitionGroup="false"
     app:dragDismissDistance="@dimen/drag_dismiss_distance"
     app:dragDismissScale="0.95"
-    tools:context="io.plaidapp.ui.DesignerNewsStory">
+    tools:context="com.olddriver.ui.DesignerNewsStory">
 
     <!-- description added as header to listview.
          see layout/designer_news_story_description -->
@@ -41,7 +41,7 @@
         android:clipToPadding="false"
         android:scrollbars="vertical" />
 
-    <io.plaidapp.ui.widget.CollapsingTitleLayout
+    <com.olddriver.ui.widget.CollapsingTitleLayout
         android:id="@+id/backdrop_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         android:theme="@style/PlaidDarkOverlay"
         style="@style/Widget.Plaid.CollapsingTitle">
 
-        <io.plaidapp.ui.widget.PinnedOffsetView
+        <com.olddriver.ui.widget.PinnedOffsetView
             android:id="@+id/story_title_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -70,8 +70,8 @@
             android:contentInsetEnd="@dimen/padding_normal"
             android:theme="@style/PlaidDarkOverlay" />
 
-    </io.plaidapp.ui.widget.CollapsingTitleLayout>
+    </com.olddriver.ui.widget.CollapsingTitleLayout>
 
     <include layout="@layout/designer_news_story_fab" />
 
-</io.plaidapp.ui.widget.ElasticDragDismissFrameLayout>
+</com.olddriver.ui.widget.ElasticDragDismissFrameLayout>

@@ -21,7 +21,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:onClick="dismiss"
-    tools:context="io.plaidapp.ui.DribbbleLogin">
+    tools:context="com.olddriver.ui.DribbbleLogin">
 
     <LinearLayout
         android:id="@+id/container"
@@ -36,7 +36,7 @@
         android:background="@drawable/dialog_background"
         android:transitionName="@string/transition_dribbble_login">
 
-        <io.plaidapp.ui.widget.BaselineGridTextView
+        <com.olddriver.ui.widget.BaselineGridTextView
             android:id="@+id/login_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

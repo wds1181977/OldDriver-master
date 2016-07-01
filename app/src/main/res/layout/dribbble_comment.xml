@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 
-<io.plaidapp.ui.widget.ForegroundRelativeLayout
+<com.olddriver.ui.widget.ForegroundRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,7 +30,7 @@
     android:stateListAnimator="@animator/comment_selection"
     android:descendantFocusability="blocksDescendants">
 
-    <io.plaidapp.ui.widget.CircularImageView
+    <com.olddriver.ui.widget.CircularImageView
         android:id="@+id/player_avatar"
         android:layout_width="@dimen/avatar_bounds"
         android:layout_height="@dimen/avatar_bounds"
@@ -43,7 +43,7 @@
         android:src="@drawable/avatar_placeholder"
         android:foreground="@drawable/avatar_ripple" />
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/comment_time_ago"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
         android:textAppearance="@style/TextAppearance.CommentTimestamp"
         tools:text="3 hours ago" />
 
-    <io.plaidapp.ui.widget.AuthorTextView
+    <com.olddriver.ui.widget.AuthorTextView
         android:id="@+id/comment_author"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
         android:textAppearance="@style/TextAppearance.CommentAuthor.Dribbble"
         tools:text="Nick B" />
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/comment_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
         tools:text="Blah blah blah blah blah blah blah blah blah blah blah blah blah"
         style="@style/Widget.Plaid.Comment" />
 
-    <io.plaidapp.ui.widget.BaselineGridTextView
+    <com.olddriver.ui.widget.BaselineGridTextView
         android:id="@+id/comment_likes_count"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/comment_actions_height"
@@ -92,7 +92,7 @@
         android:background="?android:selectableItemBackgroundBorderless"
         android:visibility="gone"  />
 
-    <io.plaidapp.ui.widget.CheckableImageButton
+    <com.olddriver.ui.widget.CheckableImageButton
         android:id="@+id/comment_like"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/comment_actions_height"
@@ -116,4 +116,4 @@
         android:stateListAnimator="@animator/reply"
         android:visibility="gone" />
 
-</io.plaidapp.ui.widget.ForegroundRelativeLayout>
+</com.olddriver.ui.widget.ForegroundRelativeLayout>

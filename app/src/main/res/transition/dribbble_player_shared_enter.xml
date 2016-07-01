@@ -22,10 +22,10 @@
 
     <changeBounds android:duration="300" />
     <pathMotion
-        class="io.plaidapp.ui.transitions.GravityArcMotion"
+        class="com.olddriver.ui.transitions.GravityArcMotion"
         android:maximumAngle="50" />
     <transition
-        class="io.plaidapp.ui.transitions.LiftOff"
+        class="com.olddriver.ui.transitions.LiftOff"
         android:duration="400"
         android:elevation="@dimen/touch_raise" />
 

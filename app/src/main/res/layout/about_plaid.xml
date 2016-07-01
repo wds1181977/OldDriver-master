@@ -29,14 +29,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <io.plaidapp.ui.widget.CutoutTextView
+        <com.olddriver.ui.widget.CutoutTextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/about_header_height"
             android:text="@string/app_name"
             app:foregroundColor="?android:colorPrimary"
             app:font="roboto-mono-regular" />
 
-        <io.plaidapp.ui.widget.BaselineGridTextView
+        <com.olddriver.ui.widget.BaselineGridTextView
             android:id="@+id/about_description"
             android:layout_width="match_parent"
             android:layout_height="0dp"

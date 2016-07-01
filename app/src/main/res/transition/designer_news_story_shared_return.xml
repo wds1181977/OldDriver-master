@@ -23,7 +23,7 @@
     <transitionSet>
         <changeBounds android:duration="300" />
         <transition
-            class="io.plaidapp.ui.transitions.LiftOff"
+            class="com.olddriver.ui.transitions.LiftOff"
             android:duration="400"
             android:elevation="@dimen/touch_raise" />
         <targets>
@@ -35,7 +35,7 @@
         <targets>
             <target android:targetId="@id/story_title_background" />
         </targets>
-        <pathMotion class="io.plaidapp.ui.transitions.GravityArcMotion" />
+        <pathMotion class="com.olddriver.ui.transitions.GravityArcMotion" />
     </changeBounds>
 
 </transitionSet>

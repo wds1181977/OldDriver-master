@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 
-<io.plaidapp.ui.widget.ElasticDragDismissFrameLayout
+<com.olddriver.ui.widget.ElasticDragDismissFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/comments_container"
@@ -50,7 +50,7 @@
 
     </FrameLayout>
 
-    <io.plaidapp.ui.widget.DynamicTypeTextView
+    <com.olddriver.ui.widget.DynamicTypeTextView
         android:id="@+id/story_title"
         android:layout_width="@dimen/designer_news_story_comments_max_width"
         android:layout_height="@dimen/designer_news_story_title_height"
@@ -76,4 +76,4 @@
 
     <include layout="@layout/designer_news_story_fab"/>
 
-</io.plaidapp.ui.widget.ElasticDragDismissFrameLayout>
+</com.olddriver.ui.widget.ElasticDragDismissFrameLayout>
