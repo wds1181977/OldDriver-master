@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +20,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.SaveCallback;
 import com.olddriver.R;
+import com.olddriver.data.AVService;
 
 import java.io.IOException;
 
@@ -65,19 +69,24 @@ public class AddActivity extends Activity {
 
     @OnClick(R.id.send)
     void send() {
-        String text = editText.getText().toString();
-        if (TextUtils.isEmpty(text) == false || bitmap != null) {
-//            final ProgressDialog dialog = StatusUtils.showSpinnerDialog(this);
-//            StatusService.sendStatus(text, bitmap, new SaveCallback() {
-//                @Override
-//                public void done(AVException e) {
-//                    dialog.dismiss();
-//                    if (StatusUtils.filterException(context, e)) {
-//                        setResult(RESULT_OK);
-//                        finish();
-//                    }
-//                }
-//            });
+        String content = editText.getText().toString();
+        if (TextUtils.isEmpty(content) == false || bitmap != null) {
+
+            SaveCallback saveCallback=new SaveCallback() {
+                @Override
+                public void done(AVException e) {
+                    // done方法一定在UI线程执行
+                    if (e != null) {
+                        Log.e("CreateTodo", "Update todo failed.", e);
+                    }
+               setResult(RESULT_OK);
+                       finish();
+
+                }
+            };
+
+            AVService.createOrUpdateTodo(content, bitmap, saveCallback);
+
         }
     }
 
