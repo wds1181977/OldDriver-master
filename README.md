@@ -7,7 +7,7 @@ Android客户端
 
 ### Screenshots
 
-<img src="screenshots/plaid_demo.gif" width="240" hspace="20">
+
 <img src="screenshots/old_driver_demo.gif" width="240" hspace="20">
 
 
