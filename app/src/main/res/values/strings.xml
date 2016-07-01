@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2015 Google Inc.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +28,12 @@
     <!-- main screen -->
     <string name="search">Search</string>
     <string name="filter">Filter</string>
+    <!-- Danny add Test -->
     <string name="pick">add</string>
+    <string name="status_addImage">添加图片</string>
+    <string name="status_cancelImage">取消图片</string>
+
+
     <string name="about">About</string>
     <string name="dribbble_login">Log in to Dribbble</string>
     <string name="dribbble_log_out">Log out of Dribbble</string>
@@ -154,5 +158,9 @@
 
     <!-- content authorities -->
     <string name="share_authority" translatable="false">io.plaidapp.shareprovider</string>
+
+    <string name="title_activity_add">AddActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

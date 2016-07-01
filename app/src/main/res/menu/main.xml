@@ -41,6 +41,11 @@
         android:showAsAction="never" />
 
     <item
+        android:id="@+id/menu_add"
+        android:title="@string/pick"
+        android:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_about"
         android:title="@string/about"
         android:showAsAction="never" />

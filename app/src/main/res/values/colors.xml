@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2015 Google Inc.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +36,8 @@
     <color name="background_dark">#ff333333</color>
     <color name="immersive_bars">#99000000</color>
     <color name="light_immersive_bars">@color/immersive_bars</color>
-    <color name="status_bar_back">#ff676767</color> <!-- this is blended with immersive_bars to produce the desired status bar color i.e. background_super_dark -->
+    <color name="status_bar_back">#ff676767
+    </color> <!-- this is blended with immersive_bars to produce the desired status bar color i.e. background_super_dark -->
     <color name="background_super_dark">#ff292929</color>
     <color name="scrim">#99323232</color>
     <color name="mid_grey">#40808080</color>
@@ -98,5 +98,7 @@
 
     <!-- search -->
     <color name="search_background_scrim">#33000000</color>
+
+    <color name="black_overlay">#66000000</color>
 
 </resources>

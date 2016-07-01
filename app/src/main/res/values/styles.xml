@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2015 Google Inc.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -69,8 +68,12 @@
         <item name="android:colorControlActivated">?android:colorAccent</item>
         <item name="android:statusBarColor">@color/designer_news_dark</item>
         <item name="android:navigationBarColor">@color/designer_news_super_dark</item>
-        <item name="android:windowSharedElementEnterTransition">@transition/designer_news_story_shared_enter</item>
-        <item name="android:windowSharedElementReturnTransition">@transition/designer_news_story_shared_return</item>
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/designer_news_story_shared_enter
+        </item>
+        <item name="android:windowSharedElementReturnTransition">
+            @transition/designer_news_story_shared_return
+        </item>
     </style>
 
     <style name="Plaid.Translucent.Dribbble">
@@ -83,8 +86,12 @@
     </style>
 
     <style name="Plaid.Translucent.Dribbble.Shot">
-        <item name="android:windowSharedElementEnterTransition">@transition/dribbble_shot_shared_enter</item>
-        <item name="android:windowSharedElementReturnTransition">@transition/dribbble_shot_shared_return</item>
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/dribbble_shot_shared_enter
+        </item>
+        <item name="android:windowSharedElementReturnTransition">
+            @transition/dribbble_shot_shared_return
+        </item>
         <item name="android:windowEnterTransition">@transition/dribbble_shot_enter</item>
         <item name="android:windowReturnTransition">@transition/dribbble_shot_return</item>
     </style>
@@ -96,7 +103,9 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
-        <item name="android:windowSharedElementEnterTransition">@transition/dribbble_player_shared_enter</item>
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/dribbble_player_shared_enter
+        </item>
         <item name="android:windowEnterTransition">@transition/dribbble_player_enter</item>
         <item name="android:windowReturnTransition">@transition/dribbble_player_return</item>
         <item name="android:windowTransitionBackgroundFadeDuration">200</item>
@@ -149,7 +158,9 @@
     <style name="Widget.Plaid" parent="android:Widget" />
 
     <style name="Widget.Plaid.Toolbar">
-        <item name="android:titleTextAppearance">@android:style/TextAppearance.Material.Widget.ActionBar.Title</item>
+        <item name="android:titleTextAppearance">
+            @android:style/TextAppearance.Material.Widget.ActionBar.Title
+        </item>
         <item name="android:background">?android:colorPrimary</item>
         <item name="android:elevation">@dimen/z_app_bar</item>
         <item name="android:theme">@style/PlaidDarkOverlay</item>
@@ -405,6 +416,18 @@
 
     <style name="LightRippleOverlay">
         <item name="android:colorControlHighlight">@color/ripple_light</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="Plaid">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
     </style>
 
 </resources>
