@@ -1,26 +1,15 @@
-# Plaid
+# 老司机
+Android客户端
 
-<img src="screenshots/plaid_demo.gif" width="400" align="right" hspace="20">
 
-*Design news and inspiration.*
 
-Plaid is a showcase of [material design](https://www.google.com/design/spec/) that we hope you will
-keep installed. It pulls in news & inspiration from [Designer News](https://www.designernews.co/),
-[Dribbble](https://dribbble.com/) & [Product Hunt](https://www.producthunt.com/). It demonstrates
-the use of
-[material principles](https://www.google.com/design/spec/material-design/introduction.html#introduction-principles)
-to create tactile, bold, understandable UIs.
-
-**[Install on Google Play (Beta Testing)](https://play.google.com/apps/testing/io.plaidapp)**
 
 
 ### Screenshots
 
+<img src="screenshots/plaid_demo.gif" width="240" hspace="20">
+<img src="screenshots/old_driver_demo.gif" width="240" hspace="20">
 
-<img src="screenshots/home_grid_framed.png" width="25%" />
-<img src="screenshots/post_story_framed.png" width="25%" />
-<img src="screenshots/dn_story_framed.png" width="25%" />
-<img src="screenshots/dribbble_shot_framed.png" width="25%" />
 
 
 ### License
