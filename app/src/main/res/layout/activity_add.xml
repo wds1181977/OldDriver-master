@@ -24,7 +24,7 @@
             android:layout_margin="10dp"
             android:textSize="12sp"
             android:padding="2dp"
-            android:text="@string/add" />
+          />
 
         <ImageView
             android:id="@+id/image"
@@ -43,7 +43,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
 
-        android:text="@string/add" />
+        android:text="send" />
+
+
+    <Button
+        android:id="@+id/get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+
+        android:text="get" />
 
 
 </LinearLayout>

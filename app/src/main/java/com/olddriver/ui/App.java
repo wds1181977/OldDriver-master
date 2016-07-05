@@ -11,7 +11,7 @@ import com.olddriver.data.AVService;
  * @date
  */
 public class App extends Application {
-
+    public static final String DETAIL_ID = "detailId";
     @Override
     public void onCreate() {
         super.onCreate();

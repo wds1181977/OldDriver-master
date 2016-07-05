@@ -14,6 +14,7 @@ import com.avos.avoscloud.AVStatus;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.search.AVSearchQuery;
+import com.olddriver.ui.App;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Collections;
@@ -77,22 +78,13 @@ public class AVService {
 
     public static void sendStatus(final String text, final String url, final SaveCallback saveCallback) {
         final Todo todo = new Todo();
-        todo.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(AVException e) {
-                if (e != null) {
-                    saveCallback.done(e);
-                } else {
-                    AVStatus status = new AVStatus();
-                    status.setMessage(text);
-                    status.setImageUrl(url);
-                    Map<String, Object> datas = new HashMap<String, Object>();
-
-                    status.setData(datas);
-                    AVStatus.sendStatusToFollowersInBackgroud(status, saveCallback);
-                }
-            }
-        });
+        todo.setContent(text);
+        todo.setImageURL(url);
+//        Map<String, Object> datas = new HashMap<String, Object>();
+//        datas.put(App.DETAIL_ID, todo.getObjectId());
+//        todo.setData(datas);
+        // 异步保存
+        todo.saveInBackground(saveCallback);
     }
 
     public static List<Todo> findTodos() {

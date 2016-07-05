@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -22,10 +23,13 @@ import butterknife.OnClick;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.SaveCallback;
+import com.bumptech.glide.Glide;
 import com.olddriver.R;
 import com.olddriver.data.AVService;
+import com.olddriver.data.Todo;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -34,6 +38,7 @@ import java.io.IOException;
 public class AddActivity extends Activity {
 
     private static final int IMAGE_PICK_REQUEST = 0;
+    private volatile List<Todo> todos;
     Context context;
 
     @BindView(R.id.editText)
@@ -52,6 +57,7 @@ public class AddActivity extends Activity {
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(R.layout.activity_add);
+
         ButterKnife.bind(this);
         setButtonAndImage();
     }
@@ -69,7 +75,9 @@ public class AddActivity extends Activity {
 
     @OnClick(R.id.send)
     void send() {
+
         String content = editText.getText().toString();
+
         if (TextUtils.isEmpty(content) == false || bitmap != null) {
 
             SaveCallback saveCallback=new SaveCallback() {
@@ -90,6 +98,14 @@ public class AddActivity extends Activity {
         }
     }
 
+
+    @OnClick(R.id.get)
+    void getData(){
+        Log.d("wds","getData");
+        new RemoteDataTask().execute();
+
+
+    }
     public static void pickImage(Activity activity, int requestCode) {
         Intent intent = new Intent(Intent.ACTION_PICK, null);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
@@ -120,6 +136,40 @@ public class AddActivity extends Activity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+
+    private class RemoteDataTask extends AsyncTask<Void, Void, Void> {
+        // Override this method to do custom remote calls
+        @Override
+        protected Void doInBackground(Void... params) {
+            todos = AVService.findTodos();
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            for (Todo todo  : todos) {
+                String msg= todo.getContent();
+                String url=todo.getImageURL();
+                Log.d("wds",msg+url);
+                Glide.with(context)
+                        .load(url)
+                        .into(imageView);
             }
         }
     }
