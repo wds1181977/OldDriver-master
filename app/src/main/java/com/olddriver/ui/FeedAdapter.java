@@ -313,7 +313,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                         final DribbbleShotHolder holder) {
         final int[] imageSize = shot.images.bestSize();
         Glide.with(host)
-                .load(shot.images.best())
+                .load(shot.getImageURL())
                 .listener(new RequestListener<String, GlideDrawable>() {
 
                     @Override
@@ -454,10 +454,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      * grid columns.
      */
     public void addAndResort(List<? extends PlaidItem> newItems) {
-        weighItems(newItems);
+      //  weighItems(newItems);
         deduplicateAndAdd(newItems);
         sort();
-        expandPopularItems();
+     //   expandPopularItems();
         notifyDataSetChanged();
     }
 

@@ -14,10 +14,18 @@ import com.avos.avoscloud.AVStatus;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.search.AVSearchQuery;
+import com.olddriver.data.api.dribbble.model.Images;
+import com.olddriver.data.api.dribbble.model.Shot;
+import com.olddriver.data.api.dribbble.model.Todo;
 import com.olddriver.ui.App;
 
+import org.jsoup.nodes.Element;
+
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +41,10 @@ import java.util.Map;
 public class AVService {
     public static void AVInit(Context ctx) {
         // 注册子类
+        AVObject.registerSubclass(Images.class);
         AVObject.registerSubclass(Todo.class);
+        AVObject.registerSubclass(Shot.class);
+        AVObject.registerSubclass(PlaidItem.class);
         AVOSCloud.setDebugLogEnabled(true);
         // 初始化应用 Id 和 应用 Key，您可以在应用设置菜单里找到这些信息
         AVOSCloud.initialize(ctx, "x7H9QGolRK3CWPY78NhwNoX1-gzGzoHsz",
@@ -64,6 +75,7 @@ public class AVService {
                 @Override
                 public void done(AVException e) {
                     if (e != null) {
+                        Log.d("wds",e.toString());
                         saveCallback.done(e);
                     } else {
                         String url = file.getUrl();
@@ -77,9 +89,11 @@ public class AVService {
     }
 
     public static void sendStatus(final String text, final String url, final SaveCallback saveCallback) {
-        final Todo todo = new Todo();
+        final Shot todo = new Shot();
+
         todo.setContent(text);
         todo.setImageURL(url);
+
 //        Map<String, Object> datas = new HashMap<String, Object>();
 //        datas.put(App.DETAIL_ID, todo.getObjectId());
 //        todo.setData(datas);
@@ -87,9 +101,9 @@ public class AVService {
         todo.saveInBackground(saveCallback);
     }
 
-    public static List<Todo> findTodos() {
+    public static List<Shot> findShots() {
         // 查询当前Todo列表
-        AVQuery<Todo> query = AVQuery.getQuery(Todo.class);
+        AVQuery<Shot> query = AVQuery.getQuery(Shot.class);
         // 按照更新时间降序排序
         query.orderByDescending("updatedAt");
         // 最大返回1000条
@@ -106,4 +120,25 @@ public class AVService {
         AVSearchQuery searchQuery = new AVSearchQuery(inputSearch);
         searchQuery.search();
     }
+
+
+//    private static Shot parseShot(final String text, final String imgUrl) {
+//
+//
+//        return new Shot.Builder()
+//                .setId(1)
+//                .setHtmlUrl(imgUrl)
+//                .setTitle(text)
+//                .setDescription(text)
+//                .setImages(new Images(null, imgUrl, null))
+//                .setAnimated(true)
+//                .setCreatedAt(null)
+//                .setLikesCount(1)
+//                .setCommentsCount(1)
+//                .setViewsCount(1)
+//                .setUser(null)
+//                .build();
+//    }
+
+
 }

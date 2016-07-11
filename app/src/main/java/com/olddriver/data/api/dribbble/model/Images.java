@@ -20,17 +20,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVObject;
+
 /**
  * Models links to the various quality of images of a shot.
  */
-public class Images implements Parcelable {
+@AVClassName("Images")
+public class Images extends AVObject implements Parcelable {
 
     private static final int[] NORMAL_IMAGE_SIZE = new int[] { 400, 300 };
     private static final int[] TWO_X_IMAGE_SIZE = new int[] { 800, 600 };
 
-    public final String hidpi;
-    public final String normal;
-    public final String teaser;
+    public String hidpi;
+    public  String normal;
+    public  String teaser;
+    public Images(){
+
+    }
 
     public Images(String hidpi, String normal, String teaser) {
         this.hidpi = hidpi;

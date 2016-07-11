@@ -16,19 +16,23 @@
 
 package com.olddriver.data;
 
+import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVObject;
+
 /**
  * Base class for all model types
  */
-public abstract class PlaidItem {
+@AVClassName("PlaidItem")
+public abstract class PlaidItem extends AVObject {
 
-    public final long id;
-    public final String title;
+    public  long id;
+    public  String title;
     public String url; // can't be final as some APIs use different serialized names
     public String dataSource;
     public int page;
     public float weight; // used for sorting
     public int colspan;
-
+    public  PlaidItem (){};
     public PlaidItem(long id,
                      String title,
                      String url) {
@@ -36,6 +40,7 @@ public abstract class PlaidItem {
         this.title = title;
         this.url = url;
     }
+
 
     @Override
     public String toString() {

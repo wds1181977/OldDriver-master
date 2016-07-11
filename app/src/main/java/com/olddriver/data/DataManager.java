@@ -17,18 +17,22 @@
 package com.olddriver.data;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bumptech.glide.Glide;
 import com.olddriver.data.api.designernews.model.StoriesResponse;
 import com.olddriver.data.api.designernews.model.Story;
 import com.olddriver.data.api.dribbble.DribbbleSearchService;
 import com.olddriver.data.api.dribbble.DribbbleService;
 import com.olddriver.data.api.dribbble.model.Like;
 import com.olddriver.data.api.dribbble.model.Shot;
+import com.olddriver.data.api.dribbble.model.Todo;
 import com.olddriver.data.api.dribbble.model.User;
 import com.olddriver.data.api.producthunt.model.Post;
 import com.olddriver.data.api.producthunt.model.PostsResponse;
@@ -160,14 +164,47 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
     }
 
     private void sourceLoaded(List<? extends PlaidItem> data, int page, String key) {
+        new RemoteDataTask().execute();
         loadFinished();
-        if (data != null && !data.isEmpty() && sourceIsEnabled(key)) {
-            setPage(data, page);
-            setDataSource(data, key);
-            onDataLoaded(data);
+        if (todos != null){
+
+            onDataLoaded(todos);
         }
-        inflight.remove(key);
+
+//        if (data != null && !data.isEmpty() && sourceIsEnabled(key)) {
+//            setPage(data, page);
+//            setDataSource(data, key);
+//            onDataLoaded(data);
+//        }
+//        inflight.remove(key);
     }
+    private volatile List<Shot> todos;
+    private class RemoteDataTask extends AsyncTask<Void, Void, Void> {
+        // Override this method to do custom remote calls
+        @Override
+        protected Void doInBackground(Void... params) {
+            todos = AVService.findShots();
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+        }
+    }
+
 
     private void loadFailed(String key) {
         loadFinished();
@@ -397,6 +434,7 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
                                 shot.user = user;
                             }
                         }
+
                         sourceLoaded(shots, page, SourceManager.SOURCE_DRIBBBLE_USER_SHOTS);
                     } else {
                         loadFailed(SourceManager.SOURCE_DRIBBBLE_USER_SHOTS);

@@ -1,7 +1,6 @@
 package com.olddriver.ui;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,7 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import butterknife.BindInt;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -26,7 +25,8 @@ import com.avos.avoscloud.SaveCallback;
 import com.bumptech.glide.Glide;
 import com.olddriver.R;
 import com.olddriver.data.AVService;
-import com.olddriver.data.Todo;
+import com.olddriver.data.api.dribbble.model.Shot;
+import com.olddriver.data.api.dribbble.model.Todo;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,7 +38,7 @@ import java.util.List;
 public class AddActivity extends Activity {
 
     private static final int IMAGE_PICK_REQUEST = 0;
-    private volatile List<Todo> todos;
+    private volatile List<Shot> todos;
     Context context;
 
     @BindView(R.id.editText)
@@ -145,7 +145,7 @@ public class AddActivity extends Activity {
         // Override this method to do custom remote calls
         @Override
         protected Void doInBackground(Void... params) {
-            todos = AVService.findTodos();
+            todos = AVService.findShots();
             return null;
         }
 
@@ -163,12 +163,11 @@ public class AddActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void result) {
-            for (Todo todo  : todos) {
-                String msg= todo.getContent();
-                String url=todo.getImageURL();
-                Log.d("wds",msg+url);
+            for (Shot todo  : todos) {
+;
+                Log.d("wds",todo.getImageURL());
                 Glide.with(context)
-                        .load(url)
+                        .load(todo.getImageURL())
                         .into(imageView);
             }
         }

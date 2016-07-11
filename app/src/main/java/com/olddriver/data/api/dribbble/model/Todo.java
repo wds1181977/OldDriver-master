@@ -1,4 +1,4 @@
-package com.olddriver.data;
+package com.olddriver.data.api.dribbble.model;
 
 import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVObject;
@@ -11,7 +11,7 @@ import com.avos.avoscloud.AVObject;
  */
 @AVClassName(Todo.TODO_CLASS)
 public class Todo extends AVObject {
-
+    public Todo(){}
     static final String TODO_CLASS = "Todo";
     private static final String CONTENT_KEY = "content";
     private static final String IMAGE_URL = "image_url";

@@ -27,44 +27,53 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.avos.avoscloud.AVClassName;
 import com.olddriver.data.PlaidItem;
 import com.olddriver.util.DribbbleUtils;
 
 /**
  * Models a dibbble shot
  */
+@AVClassName("Shot")
 public class Shot extends PlaidItem implements Parcelable {
 
-    public final String description;
-    public final long width;
-    public final long height;
-    public final Images images;
-    public final long views_count;
-    public final long likes_count;
-    public final long comments_count;
-    public final long attachments_count;
-    public final long rebounds_count;
-    public final long buckets_count;
-    public final Date created_at;
-    public final Date updated_at;
-    public final String html_url;
-    public final String attachments_url;
-    public final String buckets_url;
-    public final String comments_url;
-    public final String likes_url;
-    public final String projects_url;
-    public final String rebounds_url;
-    public final boolean animated;
-    public final List<String> tags;
+    public  String description;
+    public  String content ;
+    public  String imgae_url;
+    public  long width;
+    public  long height;
+    public  Images images;
+    public  long views_count;
+    public  long likes_count;
+    public  long comments_count;
+    public  long attachments_count;
+    public  long rebounds_count;
+    public  long buckets_count;
+    public  Date created_at;
+    public  Date updated_at;
+    public  String html_url;
+    public  String attachments_url;
+    public  String buckets_url;
+    public  String comments_url;
+    public  String likes_url;
+    public  String projects_url;
+    public  String rebounds_url;
+    public  boolean animated;
+    public  List<String> tags;
     public User user;
-    public final Team team;
+    public  Team team;
     // todo move this into a decorator
     public boolean hasFadedIn = false;
     public Spanned parsedDescription;
+    public Shot(){
+
+    }
 
     public Shot(long id,
                 String title,
                 String description,
+                String content,
+                String imgae_url,
                 long width,
                 long height,
                 Images images,
@@ -89,6 +98,8 @@ public class Shot extends PlaidItem implements Parcelable {
                 Team team) {
         super(id, title, html_url);
         this.description = description;
+        this.content=content;
+        this.imgae_url=imgae_url;
         this.width = width;
         this.height = height;
         this.images = images;
@@ -113,9 +124,27 @@ public class Shot extends PlaidItem implements Parcelable {
         this.team = team;
     }
 
+    public String getContent() {
+        return this.getString(content);
+    }
+
+    public void setContent(String contents) {
+        this.put(content, contents);
+    }
+
+
+    public String getImageURL() {
+        return this.getString(imgae_url);
+    }
+
+    public void setImageURL(String ImageURL) {
+        this.put(imgae_url, ImageURL);
+    }
     protected Shot(Parcel in) {
         super(in.readLong(), in.readString(), in.readString());
         description = in.readString();
+        content=in.readString();
+        imgae_url=in.readString();
         width = in.readLong();
         height = in.readLong();
         images = (Images) in.readValue(Images.class.getClassLoader());
@@ -157,6 +186,8 @@ public class Shot extends PlaidItem implements Parcelable {
     public static class Builder {
         private long id;
         private String title;
+        private String content;
+        private String imgae_url;
         private String description;
         private long width;
         private long height;
@@ -188,6 +219,7 @@ public class Shot extends PlaidItem implements Parcelable {
 
         public Builder setTitle(String title) {
             this.title = title;
+
             return this;
         }
 
@@ -307,7 +339,7 @@ public class Shot extends PlaidItem implements Parcelable {
         }
 
         public Shot build() {
-            return new Shot(id, title, description, width, height, images, views_count,
+            return new Shot(id, title,content,imgae_url, description, width, height, images, views_count,
                     likes_count, comments_count, attachments_count, rebounds_count,
                     buckets_count, created_at, updated_at, html_url, attachments_url,
                     buckets_url, comments_url, likes_url, projects_url, rebounds_url, animated,
@@ -339,6 +371,8 @@ public class Shot extends PlaidItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(title);
+        dest.writeString(content);
+        dest.writeString(imgae_url);
         dest.writeString(url);
         dest.writeString(description);
         dest.writeLong(width);
