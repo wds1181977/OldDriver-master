@@ -3,6 +3,8 @@ package com.olddriver.ui;
 import android.app.Application;
 
 import com.olddriver.data.AVService;
+import com.orhanobut.logger.LogLevel;
+import com.orhanobut.logger.Logger;
 
 /**
  * @author Danny
@@ -15,6 +17,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Logger.init("OD");
         AVService.AVInit(this);
     }
 }

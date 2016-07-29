@@ -48,11 +48,13 @@ public abstract class PlayerShotsDataManager extends PaginatedDataManager<List<S
 
     @Override
     protected void loadData(int page) {
-        if (!isTeam) {
-            loadUserShots(page);
-        } else {
-            loadTeamShots(page);
-        }
+
+
+//        if (!isTeam) {
+//            loadUserShots(page);
+//        } else {
+//            loadTeamShots(page);
+//        }
     }
 
     @Override
@@ -68,8 +70,8 @@ public abstract class PlayerShotsDataManager extends PaginatedDataManager<List<S
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
                 if (response.isSuccessful()) {
                     final List<Shot> shots = response.body();
-                    setPage(shots, page);
-                    setDataSource(shots, SOURCE_PLAYER_SHOTS);
+//                    setPage(shots, page);
+//                    setDataSource(shots, SOURCE_PLAYER_SHOTS);
                     onDataLoaded(shots);
                     loadFinished();
                     moreDataAvailable = shots.size() == DribbbleService.PER_PAGE_DEFAULT;
@@ -94,8 +96,8 @@ public abstract class PlayerShotsDataManager extends PaginatedDataManager<List<S
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
                 if (response.isSuccessful()) {
                     final List<Shot> shots = response.body();
-                    setPage(shots, page);
-                    setDataSource(shots, SOURCE_TEAM_SHOTS);
+//                    setPage(shots, page);
+//                    setDataSource(shots, SOURCE_TEAM_SHOTS);
                     onDataLoaded(shots);
                     loadFinished();
                     moreDataAvailable = shots.size() == DribbbleService.PER_PAGE_DEFAULT;

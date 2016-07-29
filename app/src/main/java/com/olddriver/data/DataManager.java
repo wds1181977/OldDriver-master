@@ -164,19 +164,20 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
     }
 
     private void sourceLoaded(List<? extends PlaidItem> data, int page, String key) {
-        new RemoteDataTask().execute();
-        loadFinished();
-        if (todos != null){
 
-            onDataLoaded(todos);
-        }
+//        loadFinished();
+//        if (todos != null){
+//           setPage(data, page);
+//            setDataSource(data, key);
+//           onDataLoaded(todos);
+//        }
 
 //        if (data != null && !data.isEmpty() && sourceIsEnabled(key)) {
 //            setPage(data, page);
 //            setDataSource(data, key);
 //            onDataLoaded(data);
 //        }
-//        inflight.remove(key);
+  //    inflight.remove(key);
     }
     private volatile List<Shot> todos;
     private class RemoteDataTask extends AsyncTask<Void, Void, Void> {
@@ -285,7 +286,7 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
             @Override
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
                 if (response.isSuccessful()) {
-                    sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_POPULAR);
+                  //  sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_POPULAR);
                 } else {
                     loadFailed(SourceManager.SOURCE_DRIBBBLE_POPULAR);
                 }
@@ -306,7 +307,7 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
             @Override
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
                 if (response.isSuccessful()) {
-                    sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_DEBUTS);
+                  //  sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_DEBUTS);
                 } else {
                     loadFailed(SourceManager.SOURCE_DRIBBBLE_DEBUTS);
                 }
@@ -327,7 +328,7 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
             @Override
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
                 if (response.isSuccessful()) {
-                    sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_ANIMATED);
+                  //  sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_ANIMATED);
                 } else {
                     loadFailed(SourceManager.SOURCE_DRIBBBLE_ANIMATED);
                 }
@@ -348,7 +349,7 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
             @Override
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
                 if (response.isSuccessful()) {
-                    sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_RECENT);
+                    //sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_RECENT);
                 } else {
                     loadFailed(SourceManager.SOURCE_DRIBBBLE_RECENT);
                 }
@@ -369,7 +370,7 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
             @Override
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
                 if (response.isSuccessful()) {
-                    sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_FOLLOWING);
+                    //sourceLoaded(response.body(), page, SourceManager.SOURCE_DRIBBBLE_FOLLOWING);
                 } else {
                     loadFailed(SourceManager.SOURCE_DRIBBBLE_FOLLOWING);
                 }
@@ -400,7 +401,7 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
                                 likedShots.add(like.shot);
                             }
                         }
-                        sourceLoaded(likedShots, page, SourceManager.SOURCE_DRIBBBLE_USER_LIKES);
+                    //    sourceLoaded(likedShots, page, SourceManager.SOURCE_DRIBBBLE_USER_LIKES);
                     } else {
                         loadFailed(SourceManager.SOURCE_DRIBBBLE_USER_LIKES);
                     }
@@ -435,7 +436,7 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
                             }
                         }
 
-                        sourceLoaded(shots, page, SourceManager.SOURCE_DRIBBBLE_USER_SHOTS);
+                        //sourceLoaded(shots, page, SourceManager.SOURCE_DRIBBBLE_USER_SHOTS);
                     } else {
                         loadFailed(SourceManager.SOURCE_DRIBBBLE_USER_SHOTS);
                     }
@@ -460,7 +461,7 @@ public abstract class DataManager extends BaseDataManager<List<? extends PlaidIt
             @Override
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
                 if (response.isSuccessful()) {
-                    sourceLoaded(response.body(), page, source.key);
+                    //sourceLoaded(response.body(), page, source.key);
                 } else {
                     loadFailed(source.key);
                 }

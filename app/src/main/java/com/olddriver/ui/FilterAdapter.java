@@ -243,7 +243,8 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
                 count++;
             }
         }
-        return count;
+       // return count;
+         return 2;
     }
 
     public void registerFilterChangedCallback(FiltersChangedCallbacks callback) {

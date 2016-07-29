@@ -51,6 +51,7 @@ public class AddActivity extends Activity {
     Button imageAction;
     boolean haveImage = false;
     Bitmap bitmap;
+    Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,7 @@ public class AddActivity extends Activity {
                 }
             };
 
-            AVService.createOrUpdateTodo(content, bitmap, saveCallback);
+            AVService.createOrUpdateTodo(content, uri, saveCallback);
 
         }
     }
@@ -128,7 +129,7 @@ public class AddActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IMAGE_PICK_REQUEST) {
-                Uri uri = data.getData();
+                uri = data.getData();
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                     haveImage = true;

@@ -34,6 +34,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -80,11 +81,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.olddriver.R;
+import com.olddriver.data.AVService;
 import com.olddriver.data.DataManager;
 import com.olddriver.data.PlaidItem;
 import com.olddriver.data.Source;
 import com.olddriver.data.api.designernews.PostStoryService;
 import com.olddriver.data.api.designernews.model.Story;
+import com.olddriver.data.api.dribbble.model.Shot;
 import com.olddriver.data.pocket.PocketUtils;
 import com.olddriver.data.prefs.DesignerNewsPrefs;
 import com.olddriver.data.prefs.DribbblePrefs;
@@ -96,6 +99,7 @@ import com.olddriver.ui.transitions.FabTransform;
 import com.olddriver.ui.transitions.MorphTransform;
 import com.olddriver.util.AnimUtils;
 import com.olddriver.util.ViewUtils;
+import com.orhanobut.logger.Logger;
 
 
 public class HomeActivity extends Activity {
@@ -161,22 +165,24 @@ public class HomeActivity extends Activity {
                         getAuthSourceRequestCode(forSource), options.toBundle());
             }
         });
+        new RemoteDataTask().execute();
         dataManager = new DataManager(this, filtersAdapter) {
             @Override
             public void onDataLoaded(List<? extends PlaidItem> data) {
-                adapter.addAndResort(data);
-                checkEmptyState();
+               // adapter.addAndResort(todos);
+              //  checkEmptyState();
             }
         };
+
         adapter = new FeedAdapter(this, dataManager, columns, PocketUtils.isPocketInstalled(this));
         grid.setAdapter(adapter);
         layoutManager = new GridLayoutManager(this, columns);
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                return adapter.getItemColumnSpan(position);
-            }
-        });
+//        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//            @Override
+//            public int getSpanSize(int position) {
+//                return adapter.getItemColumnSpan(position);
+//            }
+//        });
         grid.setLayoutManager(layoutManager);
         grid.addOnScrollListener(toolbarElevation);
         grid.addOnScrollListener(new InfiniteScrollListener(layoutManager, dataManager) {
@@ -250,11 +256,12 @@ public class HomeActivity extends Activity {
         filtersList.setAdapter(filtersAdapter);
         filtersList.setItemAnimator(new FilterAdapter.FilterAnimator());
         filtersAdapter.registerFilterChangedCallback(filtersChangedCallbacks);
-        dataManager.loadAllDataSources();
+       // dataManager.loadAllDataSources();
         ItemTouchHelper.Callback callback = new FilterTouchHelperCallback(filtersAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(filtersList);
-        checkEmptyState();
+       checkEmptyState();
+
     }
 
     @Override
@@ -425,16 +432,18 @@ public class HomeActivity extends Activity {
             new FilterAdapter.FiltersChangedCallbacks() {
         @Override
         public void onFiltersChanged(Source changedFilter) {
-            if (!changedFilter.active) {
-                adapter.removeDataSource(changedFilter.key);
-            }
-            checkEmptyState();
+//            if (!changedFilter.active) {
+//                adapter.removeDataSource(changedFilter.key);
+//            }
+//            Logger.d("onFiltersChanged");
+//            checkEmptyState();
         }
 
         @Override
         public void onFilterRemoved(Source removed) {
-            adapter.removeDataSource(removed.key);
-            checkEmptyState();
+//            adapter.removeDataSource(removed.key);
+//            Logger.d("onFilterRemove");
+//            checkEmptyState();
         }
     };
 
@@ -461,6 +470,7 @@ public class HomeActivity extends Activity {
 
     @OnClick(R.id.fab)
     protected void fabClick() {
+
         if (designerNewsPrefs.isLoggedIn()) {
             Intent intent = new Intent(this, PostNewDesignerNewsStory.class);
             FabTransform.addExtras(intent,
@@ -500,7 +510,7 @@ public class HomeActivity extends Activity {
 
                     // actually add the story to the grid
                     Story newStory = intent.getParcelableExtra(PostStoryService.EXTRA_NEW_STORY);
-                    adapter.addAndResort(Arrays.asList(new Story[]{ newStory }));
+                  //  adapter.addAndResort(Arrays.asList(new Story[]{ newStory }));
                     break;
                 case PostStoryService.BROADCAST_ACTION_FAILURE:
                     // failure animation
@@ -581,12 +591,14 @@ public class HomeActivity extends Activity {
     }
 
     private void checkEmptyState() {
+
         if (adapter.getDataItemCount() == 0) {
             // if grid is empty check whether we're loading or if no filters are selected
             if (filtersAdapter.getEnabledSourcesCount() > 0) {
                 if (connected) {
                     loading.setVisibility(View.VISIBLE);
                     setNoFiltersEmptyTextVisibility(View.GONE);
+
                 }
             } else {
                 loading.setVisibility(View.GONE);
@@ -836,5 +848,34 @@ public class HomeActivity extends Activity {
                 return RC_AUTH_DRIBBBLE_USER_SHOTS;
         }
         throw new InvalidParameterException();
+    }
+
+
+    private volatile List<Shot> todos;
+    private class RemoteDataTask extends AsyncTask<Void, Void, Void> {
+        // Override this method to do custom remote calls
+        @Override
+        protected Void doInBackground(Void... params) {
+            todos = AVService.findShots();
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            adapter.addAndResort(todos);
+            checkEmptyState();
+        }
     }
 }

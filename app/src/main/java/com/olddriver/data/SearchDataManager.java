@@ -123,10 +123,10 @@ public abstract class SearchDataManager extends BaseDataManager<List<? extends P
                     loadFinished();
                     final List<Shot> shots = response.body();
                     if (shots != null) {
-                        setPage(shots, resultsPage);
-                        setDataSource(shots,
-                                Source.DribbbleSearchSource.DRIBBBLE_QUERY_PREFIX + query);
-                        onDataLoaded(shots);
+//                        setPage(shots, resultsPage);
+//                        setDataSource(shots,
+//                                Source.DribbbleSearchSource.DRIBBBLE_QUERY_PREFIX + query);
+//                        onDataLoaded(shots);
                     }
                     inflight.remove(dribbbleSearchCall);
                 } else {

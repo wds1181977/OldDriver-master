@@ -271,7 +271,8 @@ public class DribbbleShot extends Activity {
         final Resources res = getResources();
 
         // load the main image
-        final int[] imageSize = shot.images.bestSize();
+      //  final int[] imageSize = shot.images.bestSize();
+        final int[] imageSize =  new int[] { 480, 854 };
         Glide.with(this)
                 .load(shot.images.best())
                 .listener(shotLoadListener)

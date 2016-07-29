@@ -28,18 +28,31 @@ import java.util.Date;
 import java.util.List;
 
 import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVObject;
 import com.olddriver.data.PlaidItem;
+import com.olddriver.data.api.dribbble.ShotDAO;
 import com.olddriver.util.DribbbleUtils;
 
 /**
  * Models a dibbble shot
  */
 @AVClassName("Shot")
-public class Shot extends PlaidItem implements Parcelable {
-
+public class Shot extends AVObject implements Parcelable {
+    private static final int[] NORMAL_IMAGE_SIZE = new int[] { 400, 300 };
+    private static final int[] TWO_X_IMAGE_SIZE = new int[] { 800, 600 };
+    public String hidpi;
+    public  String normal;
+    public  String teaser;
     public  String description;
     public  String content ;
-    public  String imgae_url;
+    public  String image_url;
+    public  long id;
+    public  String title;
+    public String url; // can't be final as some APIs use different serialized names
+    public String dataSource;
+    public int page;
+    public float weight; // used for sorting
+    public int colspan;
     public  long width;
     public  long height;
     public  Images images;
@@ -65,15 +78,16 @@ public class Shot extends PlaidItem implements Parcelable {
     // todo move this into a decorator
     public boolean hasFadedIn = false;
     public Spanned parsedDescription;
-    public Shot(){
 
+    public Shot(){
+        super();
     }
 
     public Shot(long id,
                 String title,
                 String description,
                 String content,
-                String imgae_url,
+                String image_url,
                 long width,
                 long height,
                 Images images,
@@ -96,10 +110,10 @@ public class Shot extends PlaidItem implements Parcelable {
                 List<String> tags,
                 User user,
                 Team team) {
-        super(id, title, html_url);
+        super();
         this.description = description;
         this.content=content;
-        this.imgae_url=imgae_url;
+        this.image_url=image_url;
         this.width = width;
         this.height = height;
         this.images = images;
@@ -125,26 +139,35 @@ public class Shot extends PlaidItem implements Parcelable {
     }
 
     public String getContent() {
-        return this.getString(content);
+        return this.getString(ShotDAO.CONTENT);
     }
 
     public void setContent(String contents) {
-        this.put(content, contents);
+        this.put(ShotDAO.CONTENT, contents);
     }
 
 
     public String getImageURL() {
-        return this.getString(imgae_url);
+        return this.getString(ShotDAO.IMAGE_URL);
     }
 
     public void setImageURL(String ImageURL) {
-        this.put(imgae_url, ImageURL);
+        this.put(ShotDAO.IMAGE_URL, ImageURL);
     }
+
+    public String best() {
+        return !TextUtils.isEmpty(hidpi) ? hidpi : normal;
+    }
+
+    public int[] bestSize() {
+        return !TextUtils.isEmpty(hidpi) ? TWO_X_IMAGE_SIZE : NORMAL_IMAGE_SIZE;
+    }
+
     protected Shot(Parcel in) {
-        super(in.readLong(), in.readString(), in.readString());
+        super();
         description = in.readString();
         content=in.readString();
-        imgae_url=in.readString();
+        image_url=in.readString();
         width = in.readLong();
         height = in.readLong();
         images = (Images) in.readValue(Images.class.getClassLoader());
@@ -159,7 +182,6 @@ public class Shot extends PlaidItem implements Parcelable {
         long tmpUpdated_at = in.readLong();
         updated_at = tmpUpdated_at != -1 ? new Date(tmpUpdated_at) : null;
         html_url = in.readString();
-        url = html_url;
         attachments_url = in.readString();
         buckets_url = in.readString();
         comments_url = in.readString();
@@ -369,11 +391,11 @@ public class Shot extends PlaidItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(title);
+
+
         dest.writeString(content);
-        dest.writeString(imgae_url);
-        dest.writeString(url);
+        dest.writeString(image_url);
+
         dest.writeString(description);
         dest.writeLong(width);
         dest.writeLong(height);

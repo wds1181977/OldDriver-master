@@ -1,6 +1,7 @@
 package com.olddriver.data;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -18,10 +19,13 @@ import com.olddriver.data.api.dribbble.model.Images;
 import com.olddriver.data.api.dribbble.model.Shot;
 import com.olddriver.data.api.dribbble.model.Todo;
 import com.olddriver.ui.App;
+import com.olddriver.util.ImageUtils;
 
 import org.jsoup.nodes.Element;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -39,6 +43,7 @@ import java.util.Map;
  */
 
 public class AVService {
+   private static Context mContext;
     public static void AVInit(Context ctx) {
         // 注册子类
         AVObject.registerSubclass(Images.class);
@@ -52,6 +57,7 @@ public class AVService {
         // 启用崩溃错误报告
         AVAnalytics.enableCrashReport(ctx, true);
         AVOSCloud.setLastModifyEnabled(true);
+        mContext=ctx;
     }
 
     public static void fetchTodoById(String objectId,GetCallback<AVObject> getCallback) {
@@ -61,16 +67,20 @@ public class AVService {
         todo.fetchInBackground(getCallback);
     }
 
-    public static void createOrUpdateTodo(final String text, Bitmap bitmap, final SaveCallback saveCallback) {
+    public static void createOrUpdateTodo(final String text, Uri uri, final SaveCallback saveCallback) {
 
 
-        if (bitmap != null) {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-            byte[] bs = out.toByteArray();
-
-            String name = System.currentTimeMillis()+"";
-            final AVFile file = new AVFile(name, bs);
+ //       if (bitmap != null) {
+//            ByteArrayOutputStream out = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+//            byte[] bs = out.toByteArray();
+//
+//            String name = System.currentTimeMillis()+"";
+//            final AVFile file = new AVFile(name, bs);
+           String name = System.currentTimeMillis()+"";
+        if (uri != null) {
+            byte[] data = ImageUtils.readFile(mContext,uri);
+            final AVFile file = new AVFile(name, data);
             file.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(AVException e) {

@@ -199,7 +199,7 @@ public class PlayerActivity extends Activity {
                         loading.setVisibility(View.GONE);
                         ViewUtils.setPaddingTop(shots, playerDescription.getHeight());
                     }
-                    adapter.addAndResort(data);
+                  //  adapter.addAndResort(data);
                 }
             }
         };

@@ -141,7 +141,7 @@ public class SearchActivity extends Activity {
                                         (SearchActivity
                                         .this));
                     }
-                    adapter.addAndResort(data);
+                  //  adapter.addAndResort(data);
                 } else {
                     TransitionManager.beginDelayedTransition(container, auto);
                     progress.setVisibility(View.GONE);
