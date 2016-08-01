@@ -272,9 +272,9 @@ public class DribbbleShot extends Activity {
 
         // load the main image
       //  final int[] imageSize = shot.images.bestSize();
-        final int[] imageSize =  new int[] { 480, 854 };
+        final int[] imageSize =  new int[] { 400, 300 };;
         Glide.with(this)
-                .load(shot.images.best())
+                .load(shot.getImageURL())
                 .listener(shotLoadListener)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .priority(Priority.IMMEDIATE)
