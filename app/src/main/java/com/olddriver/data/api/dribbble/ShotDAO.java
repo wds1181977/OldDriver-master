@@ -7,6 +7,10 @@ package com.olddriver.data.api.dribbble;
  * @date
  */
 public class ShotDAO {
-    public final static String CONTENT = "content";
+    public final static String TITLE="title";
+    public final static String AUTHOR = "author";
+    public final static String DESCRIPTION="description";
     public final static String IMAGE_URL = "image_url";
+
+
 }

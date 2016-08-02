@@ -71,7 +71,7 @@ public class DesignerNewsPrefs {
     }
 
     public boolean isLoggedIn() {
-        return isLoggedIn;
+        return true;
     }
 
     public void setAccessToken(String accessToken) {

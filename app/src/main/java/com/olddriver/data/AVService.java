@@ -1,8 +1,6 @@
 package com.olddriver.data;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.avos.avoscloud.AVAnalytics;
@@ -11,28 +9,15 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.AVStatus;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.search.AVSearchQuery;
 import com.olddriver.data.api.dribbble.model.Images;
 import com.olddriver.data.api.dribbble.model.Shot;
-import com.olddriver.data.api.dribbble.model.Todo;
-import com.olddriver.ui.App;
 import com.olddriver.util.ImageUtils;
 
-import org.jsoup.nodes.Element;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.net.URI;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -47,7 +32,6 @@ public class AVService {
     public static void AVInit(Context ctx) {
         // 注册子类
         AVObject.registerSubclass(Images.class);
-        AVObject.registerSubclass(Todo.class);
         AVObject.registerSubclass(Shot.class);
         AVObject.registerSubclass(PlaidItem.class);
         AVOSCloud.setDebugLogEnabled(true);
@@ -60,24 +44,18 @@ public class AVService {
         mContext=ctx;
     }
 
-    public static void fetchTodoById(String objectId,GetCallback<AVObject> getCallback) {
-        Todo todo = new Todo();
-        todo.setObjectId(objectId);
+
+    public static void fetchShotById(String objectId,GetCallback<AVObject> getCallback) {
+        Shot shot = new Shot();
+        shot.setObjectId(objectId);
         // 通过Fetch获取content内容
-        todo.fetchInBackground(getCallback);
+        shot.fetchInBackground(getCallback);
     }
 
-    public static void createOrUpdateTodo(final String text, Uri uri, final SaveCallback saveCallback) {
+    public static void createOrUpdateShot(final String title,final String  author,final String  description, Uri uri, final SaveCallback saveCallback) {
 
 
- //       if (bitmap != null) {
-//            ByteArrayOutputStream out = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-//            byte[] bs = out.toByteArray();
-//
-//            String name = System.currentTimeMillis()+"";
-//            final AVFile file = new AVFile(name, bs);
-           String name = System.currentTimeMillis()+"";
+        String name = System.currentTimeMillis()+"";
         if (uri != null) {
             byte[] data = ImageUtils.readFile(mContext,uri);
             final AVFile file = new AVFile(name, data);
@@ -89,26 +67,28 @@ public class AVService {
                         saveCallback.done(e);
                     } else {
                         String url = file.getUrl();
-                        sendStatus(text, url, saveCallback);
+                        saveShot(title,author,description, url, saveCallback);
                     }
                 }
             });
         } else {
-            sendStatus(text, "", saveCallback);
+            saveShot(title,author,description, "", saveCallback);
         }
     }
 
-    public static void sendStatus(final String text, final String url, final SaveCallback saveCallback) {
-        final Shot todo = new Shot();
+    public static void saveShot(final String title,final String author,final String description,final String url, final SaveCallback saveCallback) {
+        final Shot shot = new Shot();
 
-        todo.setContent(text);
-        todo.setImageURL(url);
+        shot.setTitle(title);
+        shot.setAuthor(author);
+        shot.setDescription(description);
+        shot.setImageURL(url);
 
 //        Map<String, Object> datas = new HashMap<String, Object>();
-//        datas.put(App.DETAIL_ID, todo.getObjectId());
-//        todo.setData(datas);
+//        datas.put(App.DETAIL_ID, shot.getObjectId());
+//        shot.setData(datas);
         // 异步保存
-        todo.saveInBackground(saveCallback);
+        shot.saveInBackground(saveCallback);
     }
 
     public static List<Shot> findShots() {
@@ -132,23 +112,6 @@ public class AVService {
     }
 
 
-//    private static Shot parseShot(final String text, final String imgUrl) {
-//
-//
-//        return new Shot.Builder()
-//                .setId(1)
-//                .setHtmlUrl(imgUrl)
-//                .setTitle(text)
-//                .setDescription(text)
-//                .setImages(new Images(null, imgUrl, null))
-//                .setAnimated(true)
-//                .setCreatedAt(null)
-//                .setLikesCount(1)
-//                .setCommentsCount(1)
-//                .setViewsCount(1)
-//                .setUser(null)
-//                .build();
-//    }
 
 
 }

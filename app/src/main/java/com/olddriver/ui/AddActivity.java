@@ -26,7 +26,6 @@ import com.bumptech.glide.Glide;
 import com.olddriver.R;
 import com.olddriver.data.AVService;
 import com.olddriver.data.api.dribbble.model.Shot;
-import com.olddriver.data.api.dribbble.model.Todo;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,8 +40,15 @@ public class AddActivity extends Activity {
     private volatile List<Shot> todos;
     Context context;
 
-    @BindView(R.id.editText)
-    EditText editText;
+    @BindView(R.id.title)
+    EditText titleET;
+
+    @BindView(R.id.description)
+    EditText descriptionET;
+
+    @BindView(R.id.author)
+    EditText authorET;
+
 
     @BindView(R.id.image)
     ImageView imageView;
@@ -77,9 +83,12 @@ public class AddActivity extends Activity {
     @OnClick(R.id.send)
     void send() {
 
-        String content = editText.getText().toString();
+        String title = titleET.getText().toString();
+        String description = descriptionET.getText().toString();
+        String author = authorET.getText().toString();
 
-        if (TextUtils.isEmpty(content) == false || bitmap != null) {
+
+        if (TextUtils.isEmpty(title) == false || bitmap != null) {
 
             SaveCallback saveCallback=new SaveCallback() {
                 @Override
@@ -94,7 +103,7 @@ public class AddActivity extends Activity {
                 }
             };
 
-            AVService.createOrUpdateTodo(content, uri, saveCallback);
+            AVService.createOrUpdateShot(title,author,description, uri, saveCallback);
 
         }
     }

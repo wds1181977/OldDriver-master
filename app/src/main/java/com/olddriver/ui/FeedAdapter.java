@@ -259,8 +259,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         .string.transition_shot));
                 Intent intent = new Intent();
                 intent.setClass(host, DribbbleShot.class);
+      
                 intent.putExtra(DribbbleShot.EXTRA_SHOT,
                         (Shot) getItem(holder.getAdapterPosition()));
+
+
+                intent.putExtra(DribbbleShot.EXTRA_SHOT_OBJECT_ID, ((Shot) getItem(holder.getAdapterPosition())).getObjectId() );
                 setGridItemContentTransitions(holder.image);
                 ActivityOptions options =
                         ActivityOptions.makeSceneTransitionAnimation(host,

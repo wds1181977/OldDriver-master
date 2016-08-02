@@ -99,6 +99,7 @@ public class DribbblePrefs {
 
     public boolean isLoggedIn() {
         return isLoggedIn;
+
     }
 
     public void setAccessToken(String accessToken) {

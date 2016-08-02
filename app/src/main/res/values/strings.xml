@@ -17,7 +17,7 @@
 <resources>
 
     <!-- global -->
-    <string name="app_name">老司机</string>
+    <string name="app_name">Old Driver</string>
     <string name="no_comments">no comments</string>
     <string name="login_to">Log in to</string>
     <string name="need_login">Woah there chief. First you\'ll need&#160;to</string> <!-- &#160; == nbsp -->
@@ -30,8 +30,8 @@
     <string name="filter">Filter</string>
     <!-- Danny add Test -->
     <string name="pick">add</string>
-    <string name="status_addImage">添加图片</string>
-    <string name="status_cancelImage">取消图片</string>
+    <string name="status_addImage">Pick Image</string>
+    <string name="status_cancelImage">Cancel Image</string>
 
 
     <string name="about">About</string>

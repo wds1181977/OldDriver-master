@@ -21,12 +21,17 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
@@ -40,20 +45,32 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnTextChanged;
+
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.SaveCallback;
 import com.olddriver.R;
+import com.olddriver.data.AVService;
 import com.olddriver.data.api.designernews.PostStoryService;
 import com.olddriver.data.prefs.DesignerNewsPrefs;
 import com.olddriver.ui.transitions.FabTransform;
 import com.olddriver.ui.transitions.MorphTransform;
 import com.olddriver.ui.widget.BottomSheet;
+import android.widget.ImageView;
 import com.olddriver.ui.widget.ObservableScrollView;
 import com.olddriver.util.AnimUtils;
 import com.olddriver.util.ImeUtils;
 
+import java.io.IOException;
+
 public class PostNewDesignerNewsStory extends Activity {
 
+    private static final int IMAGE_PICK_REQUEST = 0;
     public static final int RESULT_DRAG_DISMISSED = 3;
     public static final int RESULT_POSTING = 4;
+    private boolean haveImage = false;
+    private Bitmap bitmap;
+    private Uri uri;
+
 
     @BindView(R.id.bottom_sheet) BottomSheet bottomSheet;
     @BindView(R.id.bottom_sheet_content) ViewGroup bottomSheetContent;
@@ -64,6 +81,8 @@ public class PostNewDesignerNewsStory extends Activity {
     @BindView(R.id.new_story_url) EditText url;
     @BindView(R.id.new_story_comment_label) TextInputLayout commentLabel;
     @BindView(R.id.new_story_comment) EditText comment;
+    @BindView(R.id.imageAction) Button imageAction;
+    @BindView(R.id.image) ImageView imageView;
     @BindView(R.id.new_story_post) Button post;
     @BindDimen(R.dimen.z_app_bar) float appBarElevation;
 
@@ -165,6 +184,61 @@ public class PostNewDesignerNewsStory extends Activity {
         }
     }
 
+
+   private  void setButtonAndImage() {
+        imageView.setImageBitmap(bitmap);
+        if (haveImage) {
+            imageAction.setText(R.string.status_cancelImage);
+            imageView.setVisibility(View.VISIBLE);
+        } else {
+            imageAction.setText(R.string.status_addImage);
+            imageView.setVisibility(View.INVISIBLE);
+        }
+    }
+    private  void pickImage(Activity activity, int requestCode) {
+        Intent intent = new Intent(Intent.ACTION_PICK, null);
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+
+    private void send() {
+
+        String titles = title.getText().toString();
+        String description = comment.getText().toString();
+        String urls=url.getText().toString();
+        String author = comment.getText().toString();
+
+
+        if (TextUtils.isEmpty(titles) == false || bitmap != null) {
+
+
+            AVService.createOrUpdateShot(titles,urls,description, uri, new SaveCallback() {
+                @Override
+                public void done(AVException e) {
+                    // done方法一定在UI线程执行
+                    if (e != null) {
+                        Log.e("CreateTodo", "Update todo failed.", e);
+                    }
+//                    setResult(RESULT_OK);
+//                    finish();
+
+                }
+            });
+
+        }
+    }
+    @OnClick(R.id.imageAction)
+      void sendimageAction() {
+        if (haveImage == false) {
+            pickImage(this, IMAGE_PICK_REQUEST);
+        } else {
+            bitmap = null;
+            haveImage = false;
+            setButtonAndImage();
+        }
+    }
+
     @OnClick(R.id.bottom_sheet)
     protected void dismiss() {
         finishAfterTransition();
@@ -233,6 +307,23 @@ public class PostNewDesignerNewsStory extends Activity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == IMAGE_PICK_REQUEST) {
+                uri = data.getData();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    haveImage = true;
+                    setButtonAndImage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }

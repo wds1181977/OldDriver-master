@@ -18,21 +18,18 @@ package com.olddriver.data;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.bumptech.glide.Glide;
 import com.olddriver.data.api.designernews.model.StoriesResponse;
 import com.olddriver.data.api.designernews.model.Story;
 import com.olddriver.data.api.dribbble.DribbbleSearchService;
 import com.olddriver.data.api.dribbble.DribbbleService;
 import com.olddriver.data.api.dribbble.model.Like;
 import com.olddriver.data.api.dribbble.model.Shot;
-import com.olddriver.data.api.dribbble.model.Todo;
 import com.olddriver.data.api.dribbble.model.User;
 import com.olddriver.data.api.producthunt.model.Post;
 import com.olddriver.data.api.producthunt.model.PostsResponse;

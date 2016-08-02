@@ -27,12 +27,14 @@ import android.app.ActivityOptions;
 import android.app.assist.AssistContent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -64,6 +66,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.GetCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -78,7 +83,9 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.olddriver.R;
+import com.olddriver.data.AVService;
 import com.olddriver.data.api.dribbble.DribbbleService;
+import com.olddriver.data.api.dribbble.ShotDAO;
 import com.olddriver.data.api.dribbble.model.Comment;
 import com.olddriver.data.api.dribbble.model.Like;
 import com.olddriver.data.api.dribbble.model.Shot;
@@ -93,6 +100,7 @@ import com.olddriver.ui.widget.ForegroundImageView;
 import com.olddriver.ui.widget.ParallaxScrimageView;
 import com.olddriver.util.AnimUtils;
 import com.olddriver.util.ColorUtils;
+import com.olddriver.util.DribbbleUtils;
 import com.olddriver.util.HtmlUtils;
 import com.olddriver.util.ImeUtils;
 import com.olddriver.util.ViewUtils;
@@ -110,6 +118,7 @@ import static com.olddriver.util.AnimUtils.getLinearOutSlowInInterpolator;
 public class DribbbleShot extends Activity {
 
     public final static String EXTRA_SHOT = "EXTRA_SHOT";
+    public final static String EXTRA_SHOT_OBJECT_ID = "EXTRA_SHOT_OBJECT_ID";
     private static final int RC_LOGIN_LIKE = 0;
     private static final int RC_LOGIN_COMMENT = 1;
     private static final float SCRIM_ADJUSTMENT = 0.075f;
@@ -136,6 +145,14 @@ public class DribbbleShot extends Activity {
     private ImageButton postComment;
 
     private Shot shot;
+    private Context mContext;
+    private String ObjectId;
+
+    public Spanned mParsedDescription;
+    private String mImageUrl;
+    private String mTitle;
+    private String mAuthor;
+    private String mDescription;
     private int fabOffset;
     private DribbblePrefs dribbblePrefs;
     private boolean performingLike;
@@ -149,6 +166,7 @@ public class DribbbleShot extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dribbble_shot);
+        mContext=this;
         dribbblePrefs = DribbblePrefs.get(this);
         getWindow().getSharedElementReturnTransition().addListener(shotReturnHomeListener);
         circleTransform = new CircleTransform(this);
@@ -186,8 +204,28 @@ public class DribbbleShot extends Activity {
 
         final Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_SHOT)) {
+
             shot = intent.getParcelableExtra(EXTRA_SHOT);
-            bindShot(true, savedInstanceState != null);
+            ObjectId=intent.getStringExtra(EXTRA_SHOT_OBJECT_ID);
+
+         //传递过来的 Shot需要 通过Id获取，并且重新查找属性
+            GetCallback<AVObject> getCallback=new GetCallback<AVObject>() {
+                @Override
+                public void done(AVObject shot, AVException arg1) {
+                    if (shot != null) {
+                       mImageUrl= shot.getString(ShotDAO.IMAGE_URL);
+                        mTitle= shot.getString(ShotDAO.TITLE);
+                       mAuthor= shot.getString(ShotDAO.AUTHOR);
+                       mDescription= shot.getString(ShotDAO.DESCRIPTION);
+                        bindShot(true, savedInstanceState != null);
+
+                    }
+                }
+            };
+
+            AVService.fetchShotById(ObjectId, getCallback);
+
+
         } else if (intent.getData() != null) {
             final HttpUrl url = HttpUrl.parse(intent.getDataString());
             if (url.pathSize() == 2 && url.pathSegments().get(0).equals("shots")) {
@@ -269,17 +307,18 @@ public class DribbbleShot extends Activity {
 
     private void bindShot(final boolean postponeEnterTransition, final boolean animateFabManually) {
         final Resources res = getResources();
-
         // load the main image
-      //  final int[] imageSize = shot.images.bestSize();
-        final int[] imageSize =  new int[] { 400, 300 };;
-        Glide.with(this)
-                .load(shot.getImageURL())
+        //  final int[] imageSize = shot.images.bestSize();
+
+        final int[] imageSize =  new int[] { 800, 600 };
+        Glide.with(DribbbleShot.this)
+                .load(mImageUrl)
                 .listener(shotLoadListener)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .priority(Priority.IMMEDIATE)
                 .override(imageSize[0], imageSize[1])
                 .into(imageView);
+
         imageView.setOnClickListener(shotClick);
         shotSpacer.setOnClickListener(shotClick);
 
@@ -291,24 +330,33 @@ public class DribbbleShot extends Activity {
                 imageView.getViewTreeObserver().removeOnPreDrawListener(this);
                 calculateFabPosition();
                 enterAnimation(animateFabManually);
-                if (postponeEnterTransition) startPostponedEnterTransition();
+              //  if (postponeEnterTransition)DribbbleShot.this.startPostponedEnterTransition();
                 return true;
             }
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ((FabOverlapTextView) title).setText(shot.title);
+            ((FabOverlapTextView) title).setText(mTitle);
         } else {
-            ((TextView) title).setText(shot.title);
+            ((TextView) title).setText(mTitle);
         }
-        if (!TextUtils.isEmpty(shot.description)) {
-            final Spanned descText = shot.getParsedDescription(
-                    ContextCompat.getColorStateList(this, R.color.dribbble_links),
-                    ContextCompat.getColor(this, R.color.dribbble_link_highlight));
+        if (!TextUtils.isEmpty(mDescription)) {
+//            final Spanned descText = shot.getParsedDescription(
+//                    ContextCompat.getColorStateList(DribbbleShot.this, R.color.dribbble_links),
+//                    ContextCompat.getColor(DribbbleShot.this, R.color.dribbble_link_highlight));
+//             Spanned descText=null;
+//              ColorStateList linkTextColor=ContextCompat.getColorStateList(DribbbleShot.this, R.color.dribbble_links);
+//              int linkHighlightColor= ContextCompat.getColor(DribbbleShot.this, R.color.dribbble_link_highlight);
+//
+//                if (descText == null && !TextUtils.isEmpty(mDescription)) {
+//                    descText = DribbbleUtils.parseDribbbleHtml(mDescription, linkTextColor,
+//                            linkHighlightColor);
+//                }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ((FabOverlapTextView) description).setText(descText);
+                ((FabOverlapTextView) description).setText(mDescription);
             } else {
-                HtmlUtils.setTextWithNiceLinks((TextView) description, descText);
+                HtmlUtils.setTextWithNiceLinks((TextView) description, mDescription);
             }
         } else {
             description.setVisibility(View.GONE);

@@ -37,14 +37,15 @@ import com.olddriver.util.DribbbleUtils;
  * Models a dibbble shot
  */
 @AVClassName("Shot")
-public class Shot extends AVObject implements Parcelable {
+public class Shot extends AVObject  {
+  //  public static final Creator CREATOR = AVObjectCreator.instance;
     private static final int[] NORMAL_IMAGE_SIZE = new int[] { 400, 300 };
     private static final int[] TWO_X_IMAGE_SIZE = new int[] { 800, 600 };
     public String hidpi;
     public  String normal;
     public  String teaser;
     public  String description;
-    public  String content ;
+    public  String author ;
     public  String image_url;
     public  long id;
     public  String title;
@@ -86,7 +87,7 @@ public class Shot extends AVObject implements Parcelable {
     public Shot(long id,
                 String title,
                 String description,
-                String content,
+                String author,
                 String image_url,
                 long width,
                 long height,
@@ -111,8 +112,9 @@ public class Shot extends AVObject implements Parcelable {
                 User user,
                 Team team) {
         super();
+        this.title=title;
         this.description = description;
-        this.content=content;
+        this.author=author;
         this.image_url=image_url;
         this.width = width;
         this.height = height;
@@ -138,12 +140,36 @@ public class Shot extends AVObject implements Parcelable {
         this.team = team;
     }
 
-    public String getContent() {
-        return this.getString(ShotDAO.CONTENT);
+    public void setTitle(String title) {
+
+
+        this.put(ShotDAO.IMAGE_URL, title);
     }
 
-    public void setContent(String contents) {
-        this.put(ShotDAO.CONTENT, contents);
+    public String getTitle() {
+        return this.getString(ShotDAO.TITLE);
+    }
+
+
+    public void setDescription(String description) {
+        this.put(ShotDAO.DESCRIPTION, description);
+    }
+
+
+    public String getDescription() {
+        return this.getString(ShotDAO.DESCRIPTION);
+    }
+    public void setAuthor(String author) {
+        this.put(ShotDAO.AUTHOR, author);
+    }
+
+
+    public String getAuthor() {
+        return this.getString(ShotDAO.AUTHOR);
+    }
+
+    public void setImageURL(String ImageURL) {
+        this.put(ShotDAO.IMAGE_URL, ImageURL);
     }
 
 
@@ -151,9 +177,6 @@ public class Shot extends AVObject implements Parcelable {
         return this.getString(ShotDAO.IMAGE_URL);
     }
 
-    public void setImageURL(String ImageURL) {
-        this.put(ShotDAO.IMAGE_URL, ImageURL);
-    }
 
     public String best() {
         return !TextUtils.isEmpty(hidpi) ? hidpi : normal;
@@ -165,12 +188,13 @@ public class Shot extends AVObject implements Parcelable {
 
     protected Shot(Parcel in) {
         super();
+        title=in.readString();
         description = in.readString();
-        content=in.readString();
+        author=in.readString();
         image_url=in.readString();
         width = in.readLong();
         height = in.readLong();
-        images = (Images) in.readValue(Images.class.getClassLoader());
+     //   images = (Images) in.readValue(Images.class.getClassLoader());
         views_count = in.readLong();
         likes_count = in.readLong();
         comments_count = in.readLong();
@@ -191,8 +215,8 @@ public class Shot extends AVObject implements Parcelable {
         animated = in.readByte() != 0x00;
         tags = new ArrayList<String>();
         in.readStringList(tags);
-        user = (User) in.readValue(User.class.getClassLoader());
-        team = (Team) in.readValue(Team.class.getClassLoader());
+     //   user = (User) in.readValue(User.class.getClassLoader());
+      //  team = (Team) in.readValue(Team.class.getClassLoader());
         hasFadedIn = in.readByte() != 0x00;
     }
 
@@ -371,11 +395,13 @@ public class Shot extends AVObject implements Parcelable {
 
     /* Parcelable stuff */
 
-    @SuppressWarnings("unused")
+   // @SuppressWarnings("unused")
+
     public static final Parcelable.Creator<Shot> CREATOR = new Parcelable.Creator<Shot>() {
         @Override
         public Shot createFromParcel(Parcel in) {
             return new Shot(in);
+
         }
 
         @Override
@@ -393,9 +419,8 @@ public class Shot extends AVObject implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
 
 
-        dest.writeString(content);
+        dest.writeString(title);
         dest.writeString(image_url);
-
         dest.writeString(description);
         dest.writeLong(width);
         dest.writeLong(height);
