@@ -20,8 +20,12 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.SaveCallback;
+import com.olddriver.data.AVService;
 import com.olddriver.data.api.designernews.model.NewStoryRequest;
 import com.olddriver.data.api.designernews.model.StoriesResponse;
 import com.olddriver.data.api.designernews.model.Story;
@@ -39,6 +43,9 @@ public class PostStoryService extends IntentService {
 
     public static final String ACTION_POST_NEW_STORY = "ACTION_POST_NEW_STORY";
     public static final String EXTRA_STORY_TITLE = "EXTRA_STORY_TITLE";
+    public static final String EXTRA_STORY_AUTHOR = "EXTRA_STORY_AUTHOR";
+    public static final String EXTRA_STORY_GITHUB = "EXTRA_STORY_GITHUB";
+    public static final String EXTRA_STORY_IMAGEURL = "EXTRA_STORY_IMAGEURL";
     public static final String EXTRA_STORY_URL = "EXTRA_STORY_URL";
     public static final String EXTRA_STORY_COMMENT = "EXTRA_STORY_COMMENT";
     public static final String EXTRA_BROADCAST_RESULT = "EXTRA_BROADCAST_RESULT";
@@ -61,56 +68,88 @@ public class PostStoryService extends IntentService {
             if (!designerNewsPrefs.isLoggedIn()) return; // shouldn't happen...
 
             final String title = intent.getStringExtra(EXTRA_STORY_TITLE);
-            final String url = intent.getStringExtra(EXTRA_STORY_URL);
-            final String comment = intent.getStringExtra(EXTRA_STORY_COMMENT);
+            final String github_Url = intent.getStringExtra(EXTRA_STORY_GITHUB);
+            final String description = intent.getStringExtra(EXTRA_STORY_COMMENT);
+            final String imageUri = intent.getStringExtra(EXTRA_STORY_IMAGEURL);
             if (TextUtils.isEmpty(title)) return;
-            NewStoryRequest storyToPost = null;
-            if (!TextUtils.isEmpty(url)) {
-                storyToPost = NewStoryRequest.createWithUrl(title, url);
-            } else if (!TextUtils.isEmpty(comment)) {
-                storyToPost = NewStoryRequest.createWithComment(title, comment);
-            }
-            if (storyToPost == null) return;
-
-            final Call<StoriesResponse> postStoryCall =
-                    designerNewsPrefs.getApi().postStory(storyToPost);
-            try {
-                final Response<StoriesResponse> response = postStoryCall.execute();
-                final StoriesResponse story = response.body();
-                if (story != null && story.stories != null && !story.stories.isEmpty()) {
+            AVService.createOrUpdateShot(title,github_Url,description, imageUri, new SaveCallback() {
+                @Override
+                public void done(AVException e) {
+                    // done方法一定在UI线程执行
+                    if (e != null) {
+                        Log.e("CreateTodo", "Update todo failed.", e);
+                        final String reason = e.getMessage();
+                        if (broadcastResult) {
+                        final Intent failure = new Intent(BROADCAST_ACTION_FAILURE);
+                        failure.putExtra(BROADCAST_ACTION_FAILURE_REASON, reason);
+                        LocalBroadcastManager.getInstance(getApplicationContext())
+                            .sendBroadcast(failure);
+                        } else {
+                        Toast.makeText(getApplicationContext(), reason, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                 //上传成功发送广播通知更新UI
                     if (broadcastResult) {
                         final Intent success = new Intent(BROADCAST_ACTION_SUCCESS);
-                        // API doesn't fill in author details so add them here
-                        final Story returnedStory = story.stories.get(0);
-                        final Story.Builder builder = Story.Builder.from(returnedStory)
-                                .setUserId(designerNewsPrefs.getUserId())
-                                .setUserDisplayName(designerNewsPrefs.getUserName())
-                                .setUserPortraitUrl(designerNewsPrefs.getUserAvatar());
-                        // API doesn't add a self URL, so potentially add one for consistency
-                        if (TextUtils.isEmpty(returnedStory.url)) {
-                            builder.setDefaultUrl(returnedStory.id);
-                        }
-                        final Story newStory = builder.build();
-                        newStory.dataSource = SOURCE_NEW_DN_POST;
-                        success.putExtra(EXTRA_NEW_STORY, newStory);
+
                         LocalBroadcastManager.getInstance(getApplicationContext())
                                 .sendBroadcast(success);
                     } else {
                         Toast.makeText(getApplicationContext(), "Story posted",
                                 Toast.LENGTH_SHORT).show();
                     }
+
+
                 }
-            } catch (Exception e) {
-                final String reason = e.getMessage();
-                if (broadcastResult) {
-                    final Intent failure = new Intent(BROADCAST_ACTION_FAILURE);
-                    failure.putExtra(BROADCAST_ACTION_FAILURE_REASON, reason);
-                    LocalBroadcastManager.getInstance(getApplicationContext())
-                            .sendBroadcast(failure);
-                } else {
-                    Toast.makeText(getApplicationContext(), reason, Toast.LENGTH_SHORT).show();
-                }
-            }
+            });
+
+//            NewStoryRequest storyToPost = null;
+//            if (!TextUtils.isEmpty(url)) {
+//                storyToPost = NewStoryRequest.createWithUrl(title, url);
+//            } else if (!TextUtils.isEmpty(comment)) {
+//                storyToPost = NewStoryRequest.createWithComment(title, comment);
+//            }
+//            if (storyToPost == null) return;
+//
+//            final Call<StoriesResponse> postStoryCall =
+//                    designerNewsPrefs.getApi().postStory(storyToPost);
+//            try {
+//                final Response<StoriesResponse> response = postStoryCall.execute();
+//                final StoriesResponse story = response.body();
+//                if (story != null && story.stories != null && !story.stories.isEmpty()) {
+//                    if (broadcastResult) {
+//                        final Intent success = new Intent(BROADCAST_ACTION_SUCCESS);
+//                        // API doesn't fill in author details so add them here
+//                        final Story returnedStory = story.stories.get(0);
+//                        final Story.Builder builder = Story.Builder.from(returnedStory)
+//                                .setUserId(designerNewsPrefs.getUserId())
+//                                .setUserDisplayName(designerNewsPrefs.getUserName())
+//                                .setUserPortraitUrl(designerNewsPrefs.getUserAvatar());
+//                        // API doesn't add a self URL, so potentially add one for consistency
+//                        if (TextUtils.isEmpty(returnedStory.url)) {
+//                            builder.setDefaultUrl(returnedStory.id);
+//                        }
+//                        final Story newStory = builder.build();
+//                        newStory.dataSource = SOURCE_NEW_DN_POST;
+//                        success.putExtra(EXTRA_NEW_STORY, newStory);
+//                        LocalBroadcastManager.getInstance(getApplicationContext())
+//                                .sendBroadcast(success);
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "Story posted",
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            } catch (Exception e) {
+//                final String reason = e.getMessage();
+//                if (broadcastResult) {
+//                    final Intent failure = new Intent(BROADCAST_ACTION_FAILURE);
+//                    failure.putExtra(BROADCAST_ACTION_FAILURE_REASON, reason);
+//                    LocalBroadcastManager.getInstance(getApplicationContext())
+//                            .sendBroadcast(failure);
+//                } else {
+//                    Toast.makeText(getApplicationContext(), reason, Toast.LENGTH_SHORT).show();
+//                }
+//            }
         }
     }
 

@@ -66,7 +66,7 @@
     <string name="confirm_save_search">Save</string>
 
     <!-- new designer news story -->
-    <string name="new_story_title">Post a story to Designer News</string>
+    <string name="new_story_title">Post a story to your sample</string>
     <string name="new_story_instructions">Submit a link or provide a comment to start a discussion.</string>
     <string name="new_story_link_or_comment">Include a link <b>or</b> a comment</string>
     <string name="new_story_post_title">Post title</string>

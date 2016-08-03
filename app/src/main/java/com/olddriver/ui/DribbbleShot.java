@@ -151,7 +151,7 @@ public class DribbbleShot extends Activity {
     public Spanned mParsedDescription;
     private String mImageUrl;
     private String mTitle;
-    private String mAuthor;
+    private String mGitHub_Url;
     private String mDescription;
     private int fabOffset;
     private DribbblePrefs dribbblePrefs;
@@ -215,7 +215,7 @@ public class DribbbleShot extends Activity {
                     if (shot != null) {
                        mImageUrl= shot.getString(ShotDAO.IMAGE_URL);
                         mTitle= shot.getString(ShotDAO.TITLE);
-                       mAuthor= shot.getString(ShotDAO.AUTHOR);
+                        mGitHub_Url= shot.getString(ShotDAO.GITHUB_URL);
                        mDescription= shot.getString(ShotDAO.DESCRIPTION);
                         bindShot(true, savedInstanceState != null);
 

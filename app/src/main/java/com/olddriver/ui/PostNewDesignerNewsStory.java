@@ -69,7 +69,7 @@ public class PostNewDesignerNewsStory extends Activity {
     public static final int RESULT_POSTING = 4;
     private boolean haveImage = false;
     private Bitmap bitmap;
-    private Uri uri;
+    private Uri imageUri;
 
 
     @BindView(R.id.bottom_sheet) BottomSheet bottomSheet;
@@ -202,32 +202,7 @@ public class PostNewDesignerNewsStory extends Activity {
     }
 
 
-    private void send() {
 
-        String titles = title.getText().toString();
-        String description = comment.getText().toString();
-        String urls=url.getText().toString();
-        String author = comment.getText().toString();
-
-
-        if (TextUtils.isEmpty(titles) == false || bitmap != null) {
-
-
-            AVService.createOrUpdateShot(titles,urls,description, uri, new SaveCallback() {
-                @Override
-                public void done(AVException e) {
-                    // done方法一定在UI线程执行
-                    if (e != null) {
-                        Log.e("CreateTodo", "Update todo failed.", e);
-                    }
-//                    setResult(RESULT_OK);
-//                    finish();
-
-                }
-            });
-
-        }
-    }
     @OnClick(R.id.imageAction)
       void sendimageAction() {
         if (haveImage == false) {
@@ -251,19 +226,19 @@ public class PostNewDesignerNewsStory extends Activity {
 
     @OnTextChanged(R.id.new_story_url)
     protected void urlTextChanged(CharSequence text) {
-        final boolean emptyUrl = TextUtils.isEmpty(text);
-        comment.setEnabled(emptyUrl);
-        commentLabel.setEnabled(emptyUrl);
-        comment.setFocusableInTouchMode(emptyUrl);
+//        final boolean emptyUrl = TextUtils.isEmpty(text);
+//        comment.setEnabled(emptyUrl);
+//        commentLabel.setEnabled(emptyUrl);
+//        comment.setFocusableInTouchMode(emptyUrl);
         setPostButtonState();
     }
 
     @OnTextChanged(R.id.new_story_comment)
     protected void commentTextChanged(CharSequence text) {
-        final boolean emptyComment = TextUtils.isEmpty(text);
-        url.setEnabled(emptyComment);
-        urlLabel.setEnabled(emptyComment);
-        url.setFocusableInTouchMode(emptyComment);
+//        final boolean emptyComment = TextUtils.isEmpty(text);
+//        url.setEnabled(emptyComment);
+//        urlLabel.setEnabled(emptyComment);
+//        url.setFocusableInTouchMode(emptyComment);
         setPostButtonState();
     }
 
@@ -274,8 +249,9 @@ public class PostNewDesignerNewsStory extends Activity {
             Intent postIntent = new Intent(PostStoryService.ACTION_POST_NEW_STORY, null,
                     this, PostStoryService.class);
             postIntent.putExtra(PostStoryService.EXTRA_STORY_TITLE, title.getText().toString());
-            postIntent.putExtra(PostStoryService.EXTRA_STORY_URL, url.getText().toString());
+            postIntent.putExtra(PostStoryService.EXTRA_STORY_GITHUB, url.getText().toString());
             postIntent.putExtra(PostStoryService.EXTRA_STORY_COMMENT, comment.getText().toString());
+            postIntent.putExtra(PostStoryService.EXTRA_STORY_IMAGEURL, imageUri.toString());
             postIntent.putExtra(PostStoryService.EXTRA_BROADCAST_RESULT,
                     getIntent().getBooleanExtra(PostStoryService.EXTRA_BROADCAST_RESULT, false));
             startService(postIntent);
@@ -296,10 +272,9 @@ public class PostNewDesignerNewsStory extends Activity {
 
     private void setPostButtonState() {
         post.setEnabled(!TextUtils.isEmpty(title.getText())
-                       && (!TextUtils.isEmpty(url.getText())
-                            || !TextUtils.isEmpty(comment.getText())));
+                );
     }
-
+//监听软键盘回车
     @OnEditorAction({ R.id.new_story_url, R.id.new_story_comment })
     protected boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -314,9 +289,9 @@ public class PostNewDesignerNewsStory extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IMAGE_PICK_REQUEST) {
-                uri = data.getData();
+                imageUri = data.getData();
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                     haveImage = true;
                     setButtonAndImage();
                 } catch (IOException e) {

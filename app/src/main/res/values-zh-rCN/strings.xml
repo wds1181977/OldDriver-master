@@ -32,12 +32,12 @@
     <string name="confirm_save_search">Save</string>
 
     <!-- new designer news story -->
-    <string name="new_story_title">上传项目演示gif到老司机</string>
-    <string name="new_story_instructions">提交演示项目名字，作者，Github地址，项目简介，演示GIF截图.</string>
-    <string name="new_story_link_or_comment">GitHub原作者链接</string>
-    <string name="new_story_post_title">项目名字</string>
+    <string name="new_story_title">上传您的演示</string>
+    <string name="new_story_instructions">提交名称,作者,GitHub,简介,GIF.</string>
+    <string name="new_story_link_or_comment">GitHub</string>
+    <string name="new_story_post_title">名称</string>
     <string name="new_story_url">Url</string>
-    <string name="new_story_url_hint">Github链接</string>
+    <string name="new_story_url_hint">Github地址</string>
     <string name="new_story_post">开始上传</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">设置</string>

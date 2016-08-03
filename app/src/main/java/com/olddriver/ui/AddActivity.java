@@ -103,7 +103,7 @@ public class AddActivity extends Activity {
                 }
             };
 
-            AVService.createOrUpdateShot(title,author,description, uri, saveCallback);
+            AVService.createOrUpdateShot(title,null,description, uri.toString(), saveCallback);
 
         }
     }

@@ -45,7 +45,7 @@ public class Shot extends AVObject  {
     public  String normal;
     public  String teaser;
     public  String description;
-    public  String author ;
+    public  String github_url ;
     public  String image_url;
     public  long id;
     public  String title;
@@ -87,7 +87,7 @@ public class Shot extends AVObject  {
     public Shot(long id,
                 String title,
                 String description,
-                String author,
+                String github_url,
                 String image_url,
                 long width,
                 long height,
@@ -114,7 +114,7 @@ public class Shot extends AVObject  {
         super();
         this.title=title;
         this.description = description;
-        this.author=author;
+        this.github_url=github_url;
         this.image_url=image_url;
         this.width = width;
         this.height = height;
@@ -159,13 +159,13 @@ public class Shot extends AVObject  {
     public String getDescription() {
         return this.getString(ShotDAO.DESCRIPTION);
     }
-    public void setAuthor(String author) {
-        this.put(ShotDAO.AUTHOR, author);
+    public void setGitHubUrl(String url) {
+        this.put(ShotDAO.GITHUB_URL, url);
     }
 
 
-    public String getAuthor() {
-        return this.getString(ShotDAO.AUTHOR);
+    public String getGitHubUrl() {
+        return this.getString(ShotDAO.GITHUB_URL);
     }
 
     public void setImageURL(String ImageURL) {
@@ -190,7 +190,7 @@ public class Shot extends AVObject  {
         super();
         title=in.readString();
         description = in.readString();
-        author=in.readString();
+        github_url=in.readString();
         image_url=in.readString();
         width = in.readLong();
         height = in.readLong();

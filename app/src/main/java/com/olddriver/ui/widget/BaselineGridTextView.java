@@ -71,7 +71,7 @@ public class BaselineGridTextView extends FontTextView {
         a.recycle();
 
         FOUR_DIP = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
+                TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
 
         setIncludeFontPadding(false);
         setElegantTextHeight(false);

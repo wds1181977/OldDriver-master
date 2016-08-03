@@ -52,6 +52,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -389,6 +390,7 @@ public class HomeActivity extends Activity {
                         unregisterPostStoryResultListener();
                         break;
                     case PostNewDesignerNewsStory.RESULT_POSTING:
+                        checkEmptyState();
                         showPostingProgress();
                         break;
                     default:
@@ -497,6 +499,9 @@ public class HomeActivity extends Activity {
             switch (intent.getAction()) {
                 case PostStoryService.BROADCAST_ACTION_SUCCESS:
                     // success animation
+//                    Log.d("wdsaa","ss");
+//                    adapter.addAndResort(todos);
+                 //   new RemoteDataTask().execute();
                     AnimatedVectorDrawable complete =
                             (AnimatedVectorDrawable) getDrawable(R.drawable.avd_upload_complete);
                     fabPosting.setImageDrawable(complete);
@@ -509,7 +514,7 @@ public class HomeActivity extends Activity {
                     }, 2100); // length of R.drawable.avd_upload_complete
 
                     // actually add the story to the grid
-                    Story newStory = intent.getParcelableExtra(PostStoryService.EXTRA_NEW_STORY);
+                  //  Story newStory = intent.getParcelableExtra(PostStoryService.EXTRA_NEW_S TORY);
                   //  adapter.addAndResort(Arrays.asList(new Story[]{ newStory }));
                     break;
                 case PostStoryService.BROADCAST_ACTION_FAILURE:

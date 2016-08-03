@@ -52,11 +52,12 @@ public class AVService {
         shot.fetchInBackground(getCallback);
     }
 
-    public static void createOrUpdateShot(final String title,final String  author,final String  description, Uri uri, final SaveCallback saveCallback) {
+    public static void createOrUpdateShot(final String title,final String  githubUrl,final String  description, final String image_uri, final SaveCallback saveCallback) {
 
 
         String name = System.currentTimeMillis()+"";
-        if (uri != null) {
+        if (image_uri != null) {
+            Uri uri=Uri.parse(image_uri);
             byte[] data = ImageUtils.readFile(mContext,uri);
             final AVFile file = new AVFile(name, data);
             file.saveInBackground(new SaveCallback() {
@@ -66,23 +67,23 @@ public class AVService {
                         Log.d("wds",e.toString());
                         saveCallback.done(e);
                     } else {
-                        String url = file.getUrl();
-                        saveShot(title,author,description, url, saveCallback);
+                        String image_url = file.getUrl();
+                        saveShot(title,githubUrl,description, image_url, saveCallback);
                     }
                 }
             });
         } else {
-            saveShot(title,author,description, "", saveCallback);
+            saveShot(title,githubUrl,description, "", saveCallback);
         }
     }
 
-    public static void saveShot(final String title,final String author,final String description,final String url, final SaveCallback saveCallback) {
+    public static void saveShot(final String title,final String githubUrl,final String description,final String image_url, final SaveCallback saveCallback) {
         final Shot shot = new Shot();
 
         shot.setTitle(title);
-        shot.setAuthor(author);
+        shot.setGitHubUrl(githubUrl);
         shot.setDescription(description);
-        shot.setImageURL(url);
+        shot.setImageURL(image_url);
 
 //        Map<String, Object> datas = new HashMap<String, Object>();
 //        datas.put(App.DETAIL_ID, shot.getObjectId());
