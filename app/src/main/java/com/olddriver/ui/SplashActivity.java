@@ -47,7 +47,6 @@ import java.io.InputStream;
 
         private TextView appName;
 
-     private static final int SPLASH_SHOW_TIME = 1000;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -60,39 +59,29 @@ import java.io.InputStream;
             setContentView(R.layout.activity_splash);
 
 
-            findView();
-
-            initView();
-
-            File videoFile = getFileStreamPath(VIDEO_NAME);
-            if (!videoFile.exists()) {
-                videoFile = copyVideoFile();
-            }
-            playVideo(videoFile);
-            playAnim();
-
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    startActivity(new Intent(SplashActivity.this,HomeActivity.class));
-                    finish();
-                }
-
-            }, SPLASH_SHOW_TIME);
+//            findView();
+//
+//            initView();
+//
+//            File videoFile = getFileStreamPath(VIDEO_NAME);
+//            if (!videoFile.exists()) {
+//                videoFile = copyVideoFile();
+//            }
+//            playVideo(videoFile);
+//            playAnim();
 
         }
 
-        private void findView() {
-            mVideoView = (VideoView) findViewById(R.id.videoView);
-            buttonLeft = (Button) findViewById(R.id.buttonLeft);
-            buttonRight = (Button) findViewById(R.id.buttonRight);
-            contianer = (ViewGroup) findViewById(R.id.container);
-            formView = (LoginView) findViewById(R.id.formView);
-            appName = (TextView) findViewById(R.id.appName);
-            buttonLeft.setVisibility(View.GONE);
-            buttonRight.setVisibility(View.GONE);
-            formView.setVisibility(View.GONE);
+//        private void findView() {
+//            mVideoView = (VideoView) findViewById(R.id.videoView);
+//            buttonLeft = (Button) findViewById(R.id.buttonLeft);
+//         //   buttonRight = (Button) findViewById(R.id.buttonRight);
+//            contianer = (ViewGroup) findViewById(R.id.container);
+//            formView = (LoginView) findViewById(R.id.formView);
+//            appName = (TextView) findViewById(R.id.appName);
+////            buttonLeft.setVisibility(View.GONE);
+////            buttonRight.setVisibility(View.GONE);
+////            formView.setVisibility(View.GONE);
 //            formView.post(new Runnable() {
 //                @Override
 //                public void run() {
@@ -100,11 +89,11 @@ import java.io.InputStream;
 //                    formView.setTranslationY(-1 * delta);
 //                }
 //            });
-        }
+//        }
 
         private void initView() {
 
-            buttonRight.setOnClickListener(this);
+         //   buttonRight.setOnClickListener(this);
             buttonLeft.setOnClickListener(this);
         }
 

@@ -52,6 +52,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.LogInCallback;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -177,12 +180,46 @@ public class DesignerNewsLogin extends Activity {
 
     public void doLogin(View view) {
         showLoading();
-        getAccessToken();
+      //  getAccessToken();
+
+        AVUser.logInInBackground(username.getText().toString(), password.getText().toString(), new LogInCallback<AVUser>() {
+            @Override
+            public void done(AVUser avUser, AVException e) {
+                    if (e!=null) {
+                        showLoginFailed();
+                   }
+
+               // showLoggedInUser();
+
+//                final User user = response.body().user;
+//                designerNewsPrefs.setLoggedInUser(user);
+                final Toast confirmLogin = new Toast(getApplicationContext());
+                final View v = LayoutInflater.from(DesignerNewsLogin.this).inflate(R.layout
+                        .toast_logged_in_confirmation, null, false);
+                ((TextView) v.findViewById(R.id.name)).setText(avUser.getUsername());
+                // need to use app context here as the activity will be destroyed shortly
+                Glide.with(getApplicationContext())
+                        .load("http://ac-x7H9QGol.clouddn.com/tGYjIsUxinHOohaQPlDX9wtaCpI6j2dTfQXsASP8")
+                        .placeholder(R.drawable.avatar_placeholder)
+                        .transform(new CircleTransform(getApplicationContext()))
+                        .into((ImageView) v.findViewById(R.id.avatar));
+                v.findViewById(R.id.scrim).setBackground(ScrimUtil
+                        .makeCubicGradientScrimDrawable(
+                                ContextCompat.getColor(DesignerNewsLogin.this, R.color.scrim),
+                                5, Gravity.BOTTOM));
+                confirmLogin.setView(v);
+                confirmLogin.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
+                confirmLogin.setDuration(Toast.LENGTH_LONG);
+                confirmLogin.show();
+                setResult(Activity.RESULT_OK);
+                finish();
+
+            }
+        });
     }
 
     public void signup(View view) {
-        startActivity(new Intent(Intent.ACTION_VIEW,
-                Uri.parse("https://www.designernews.co/users/new")));
+        startActivity(new Intent(this,SplashActivity.class));
     }
 
     public void dismiss(View view) {
