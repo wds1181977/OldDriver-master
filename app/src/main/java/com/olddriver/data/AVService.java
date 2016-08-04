@@ -1,6 +1,7 @@
 package com.olddriver.data;
 import android.content.Context;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.avos.avoscloud.AVAnalytics;
@@ -9,7 +10,9 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.GetCallback;
+import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.search.AVSearchQuery;
 import com.olddriver.data.api.dribbble.model.Images;
@@ -18,6 +21,8 @@ import com.olddriver.util.ImageUtils;
 
 import java.util.Collections;
 import java.util.List;
+
+import butterknife.OnClick;
 
 
 /**
@@ -110,6 +115,39 @@ public class AVService {
     public static void searchQuery(String inputSearch) {
         AVSearchQuery searchQuery = new AVSearchQuery(inputSearch);
         searchQuery.search();
+    }
+
+
+
+    public static   void login(String username, String password  ) {
+
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+            AVUser.logInInBackground(username, password, new LogInCallback<AVUser>() {
+                @Override
+                public void done(AVUser avUser, AVException e) {
+//                    if (filterException(e)) {
+//                        //onSucceed();
+//                    }
+                }
+            });
+        }
+    }
+
+    public static  void register(String username, String password) {
+
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+            AVUser user = new AVUser();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(AVException e) {
+//                    if (filterException(e)) {
+//                        onSucceed();
+//                    }
+                }
+            });
+        }
     }
 
 

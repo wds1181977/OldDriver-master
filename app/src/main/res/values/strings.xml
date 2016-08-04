@@ -163,4 +163,17 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
+    <string name="button_login">Login</string>
+    <string name="button_signup">Sign Up</string>
+    <string name="button_confirm_login">Confirm Login</string>
+    <string name="button_cancel_login">Cancel Login</string>
+    <string name="button_confirm_signup">Confirm Sign Up</string>
+    <string name="button_cancel_signup">Cancel Sign Up</string>
+    <string name="edit_username">username</string>
+    <string name="edit_password">password</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="hello_round">Hello Round World!</string>
+    <string name="hello_square">Hello Square World!</string>
+
+
 </resources>

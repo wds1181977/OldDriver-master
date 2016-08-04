@@ -205,6 +205,7 @@ public class PostNewDesignerNewsStory extends Activity {
 
     @OnClick(R.id.imageAction)
       void sendimageAction() {
+        ImeUtils.hideIme(title);
         if (haveImage == false) {
             pickImage(this, IMAGE_PICK_REQUEST);
         } else {

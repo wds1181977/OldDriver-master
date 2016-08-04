@@ -390,7 +390,8 @@ public class HomeActivity extends Activity {
                         unregisterPostStoryResultListener();
                         break;
                     case PostNewDesignerNewsStory.RESULT_POSTING:
-                        checkEmptyState();
+
+
                         showPostingProgress();
                         break;
                     default:
@@ -499,9 +500,6 @@ public class HomeActivity extends Activity {
             switch (intent.getAction()) {
                 case PostStoryService.BROADCAST_ACTION_SUCCESS:
                     // success animation
-//                    Log.d("wdsaa","ss");
-//                    adapter.addAndResort(todos);
-                 //   new RemoteDataTask().execute();
                     AnimatedVectorDrawable complete =
                             (AnimatedVectorDrawable) getDrawable(R.drawable.avd_upload_complete);
                     fabPosting.setImageDrawable(complete);
@@ -513,6 +511,8 @@ public class HomeActivity extends Activity {
                         }
                     }, 2100); // length of R.drawable.avd_upload_complete
 
+
+                   // new RemoteDataTask().execute();
                     // actually add the story to the grid
                   //  Story newStory = intent.getParcelableExtra(PostStoryService.EXTRA_NEW_S TORY);
                   //  adapter.addAndResort(Arrays.asList(new Story[]{ newStory }));
@@ -879,6 +879,7 @@ public class HomeActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void result) {
+            Log.d("wds4","880");
             adapter.addAndResort(todos);
             checkEmptyState();
         }
