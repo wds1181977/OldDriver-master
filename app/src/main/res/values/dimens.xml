@@ -98,7 +98,13 @@
 
     <!-- per https://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#MATCH_PARENT -->
     <item name="match_parent" format="integer" type="dimen">-1</item>
-
+    <dimen name="drawer_header_icon">68dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- -->
+    <dimen name="avatar_height">96dp</dimen>
+    <dimen name="sign_up_marginTop">16dp</dimen>
+    <dimen name="sign_up_title_textSize">36sp</dimen>
+
 </resources>

@@ -10,19 +10,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.olddriver.R;
+
 import com.olddriver.ui.widget.LoginView;
+import com.olddriver.ui.widget.SplashVideoView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,22 +35,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.BindView;
 
- public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
 
-        public static final String VIDEO_NAME = "welcome_video.mp4";
+public class SplashActivity extends Activity  {
 
-        private VideoView mVideoView;
+    public static final String VIDEO_NAME = "welcome_video.mp4";
 
-        private InputType inputType = InputType.NONE;
 
-        private Button buttonLeft, buttonRight;
-
-        private LoginView formView;
-
-        private ViewGroup contianer;
-
-        private TextView appName;
+    @BindView(R.id.title) TextView title;
+    @BindView(R.id.videoView) SplashVideoView mVideoView;
+    @BindView(R.id.iv_avatar) ImageView ivAvatar;
+    @BindView(R.id.btn_change_avatar) Button btnChangeAvatar;
+//    @BindView(R.id.nick_input) TextInputLayout nickInput;
+//    @BindView(R.id.sex_input) TextInputLayout sexInput;
+//    @BindView(R.id.city_input) TextInputLayout cityInput;
+//    @BindView(R.id.lover_input) TextInputLayout loverInput;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -57,31 +64,23 @@ import java.io.InputStream;
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
             setContentView(R.layout.activity_splash);
+            ButterKnife.bind(this);
 
-
-//            findView();
-//
-//            initView();
-//
-//            File videoFile = getFileStreamPath(VIDEO_NAME);
-//            if (!videoFile.exists()) {
-//                videoFile = copyVideoFile();
-//            }
-//            playVideo(videoFile);
-//            playAnim();
+            playVideo();
+            playAnim();
 
         }
 
-//        private void findView() {
-//            mVideoView = (VideoView) findViewById(R.id.videoView);
-//            buttonLeft = (Button) findViewById(R.id.buttonLeft);
-//         //   buttonRight = (Button) findViewById(R.id.buttonRight);
+        private void findView() {
+        //    mVideoView = (VideoView) findViewById(R.id.videoView);
+        //    buttonLeft = (Button) findViewById(R.id.buttonLeft);
+         //   buttonRight = (Button) findViewById(R.id.buttonRight);
 //            contianer = (ViewGroup) findViewById(R.id.container);
 //            formView = (LoginView) findViewById(R.id.formView);
-//            appName = (TextView) findViewById(R.id.appName);
-////            buttonLeft.setVisibility(View.GONE);
-////            buttonRight.setVisibility(View.GONE);
-////            formView.setVisibility(View.GONE);
+            title = (TextView) findViewById(R.id.title);
+//            buttonLeft.setVisibility(View.GONE);
+//            buttonRight.setVisibility(View.GONE);
+//            formView.setVisibility(View.GONE);
 //            formView.post(new Runnable() {
 //                @Override
 //                public void run() {
@@ -89,15 +88,20 @@ import java.io.InputStream;
 //                    formView.setTranslationY(-1 * delta);
 //                }
 //            });
-//        }
+        }
 
         private void initView() {
 
          //   buttonRight.setOnClickListener(this);
-            buttonLeft.setOnClickListener(this);
+        //    buttonLeft.setOnClickListener(this);
         }
 
-        private void playVideo(File videoFile) {
+        private void playVideo() {
+
+            File videoFile = getFileStreamPath(VIDEO_NAME);
+            if (!videoFile.exists()) {
+                videoFile = copyVideoFile();
+            }
             mVideoView.setVideoPath(videoFile.getPath());
             mVideoView.setLayoutParams(new RelativeLayout.LayoutParams(-1, -1));
             mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -110,7 +114,7 @@ import java.io.InputStream;
         }
 
         private void playAnim() {
-            ObjectAnimator anim = ObjectAnimator.ofFloat(appName, "alpha", 0,1);
+            ObjectAnimator anim = ObjectAnimator.ofFloat(title, "alpha", 0,1);
             anim.setDuration(4000);
             anim.setRepeatCount(1);
             anim.setRepeatMode(ObjectAnimator.REVERSE);
@@ -118,7 +122,7 @@ import java.io.InputStream;
             anim.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    appName.setVisibility(View.INVISIBLE);
+                    title.setVisibility(View.INVISIBLE);
                 }
             });
         }
@@ -151,52 +155,52 @@ import java.io.InputStream;
             mVideoView.stopPlayback();
         }
 
-        @Override
-        public void onClick(View view) {
-            int delta = formView.getTop()+formView.getHeight();
-            switch (inputType) {
-                case NONE:
-
-                    formView.animate().translationY(0).alpha(1).setDuration(500).start();
-                    if (view == buttonLeft) {
-                        inputType = InputType.LOGIN;
-                        buttonLeft.setText(R.string.button_confirm_login);
-                        buttonRight.setText(R.string.button_cancel_login);
-                    } else if (view == buttonRight) {
-                        inputType = InputType.SIGN_UP;
-                        buttonLeft.setText(R.string.button_confirm_signup);
-                        buttonRight.setText(R.string.button_cancel_signup);
-                    }
-
-                    break;
-                case LOGIN:
-
-                    formView.animate().translationY(-1 * delta).alpha(0).setDuration(500).start();
-                    if (view == buttonLeft) {
-
-                    } else if (view == buttonRight) {
-
-                    }
-                    inputType = InputType.NONE;
-                    buttonLeft.setText(R.string.button_login);
-                    buttonRight.setText(R.string.button_signup);
-                    break;
-                case SIGN_UP:
-
-                    formView.animate().translationY(-1 * delta).alpha(0).setDuration(500).start();
-                    if (view == buttonLeft) {
-
-                    } else if (view == buttonRight) {
-
-                    }
-                    inputType = InputType.NONE;
-                    buttonLeft.setText(R.string.button_login);
-                    buttonRight.setText(R.string.button_signup);
-                    break;
-            }
-        }
-
-        enum InputType {
-            NONE, LOGIN, SIGN_UP;
-        }
+//        @Override
+//        public void onClick(View view) {
+//            int delta = formView.getTop()+formView.getHeight();
+//            switch (inputType) {
+//                case NONE:
+//
+//                    formView.animate().translationY(0).alpha(1).setDuration(500).start();
+//                    if (view == buttonLeft) {
+//                        inputType = InputType.LOGIN;
+//                        buttonLeft.setText(R.string.button_confirm_login);
+//                        buttonRight.setText(R.string.button_cancel_login);
+//                    } else if (view == buttonRight) {
+//                        inputType = InputType.SIGN_UP;
+//                        buttonLeft.setText(R.string.button_confirm_signup);
+//                        buttonRight.setText(R.string.button_cancel_signup);
+//                    }
+//
+//                    break;
+//                case LOGIN:
+//
+//                    formView.animate().translationY(-1 * delta).alpha(0).setDuration(500).start();
+//                    if (view == buttonLeft) {
+//
+//                    } else if (view == buttonRight) {
+//
+//                    }
+//                    inputType = InputType.NONE;
+//                    buttonLeft.setText(R.string.button_login);
+//                    buttonRight.setText(R.string.button_signup);
+//                    break;
+//                case SIGN_UP:
+//
+//                    formView.animate().translationY(-1 * delta).alpha(0).setDuration(500).start();
+//                    if (view == buttonLeft) {
+//
+//                    } else if (view == buttonRight) {
+//
+//                    }
+//                    inputType = InputType.NONE;
+//                    buttonLeft.setText(R.string.button_login);
+//                    buttonRight.setText(R.string.button_signup);
+//                    break;
+//            }
+//        }
+//
+//        enum InputType {
+//            NONE, LOGIN, SIGN_UP;
+//        }
     }
