@@ -70,6 +70,7 @@ import com.olddriver.R;
 import com.olddriver.data.api.designernews.model.AccessToken;
 import com.olddriver.data.api.designernews.model.User;
 import com.olddriver.data.api.designernews.model.UserResponse;
+import com.olddriver.data.api.dribbble.UserDAO;
 import com.olddriver.data.prefs.DesignerNewsPrefs;
 import com.olddriver.ui.transitions.FabTransform;
 import com.olddriver.ui.transitions.MorphTransform;
@@ -185,21 +186,21 @@ public class DesignerNewsLogin extends Activity {
         AVUser.logInInBackground(username.getText().toString(), password.getText().toString(), new LogInCallback<AVUser>() {
             @Override
             public void done(AVUser avUser, AVException e) {
-                    if (e!=null) {
-                        showLoginFailed();
-                   }
+                if (e != null) {
+                    showLoginFailed();
+                } else{
 
-               // showLoggedInUser();
+                    // showLoggedInUser();
 
 //                final User user = response.body().user;
 //                designerNewsPrefs.setLoggedInUser(user);
-                final Toast confirmLogin = new Toast(getApplicationContext());
+                    final Toast confirmLogin = new Toast(getApplicationContext());
                 final View v = LayoutInflater.from(DesignerNewsLogin.this).inflate(R.layout
                         .toast_logged_in_confirmation, null, false);
-                ((TextView) v.findViewById(R.id.name)).setText(username.getText().toString());
+                ((TextView) v.findViewById(R.id.name)).setText(avUser.getUsername());
                 // need to use app context here as the activity will be destroyed shortly
                 Glide.with(getApplicationContext())
-                        .load("http://ac-x7H9QGol.clouddn.com/tGYjIsUxinHOohaQPlDX9wtaCpI6j2dTfQXsASP8")
+                        .load(avUser.getString(UserDAO.AVATRR_URL))
                         .placeholder(R.drawable.avatar_placeholder)
                         .transform(new CircleTransform(getApplicationContext()))
                         .into((ImageView) v.findViewById(R.id.avatar));
@@ -215,7 +216,9 @@ public class DesignerNewsLogin extends Activity {
                 finish();
 
             }
+            }
         });
+
     }
 
     public void signup(View view) {
@@ -366,7 +369,7 @@ public class DesignerNewsLogin extends Activity {
         });
     }
 
-    private void setupAccountAutocomplete() {
+    private void  setupAccountAutocomplete() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) ==
                 PackageManager.PERMISSION_GRANTED) {
             permissionPrimer.setVisibility(View.GONE);

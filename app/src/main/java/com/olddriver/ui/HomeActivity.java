@@ -81,6 +81,8 @@ import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import com.avos.avoscloud.AVUser;
 import com.olddriver.R;
 import com.olddriver.data.AVService;
 import com.olddriver.data.DataManager;
@@ -292,11 +294,7 @@ public class HomeActivity extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        final MenuItem dribbbleLogin = menu.findItem(R.id.menu_dribbble_login);
-        if (dribbbleLogin != null) {
-            dribbbleLogin.setTitle(dribbblePrefs.isLoggedIn() ?
-                    R.string.dribbble_log_out : R.string.dribbble_login);
-        }
+
         final MenuItem designerNewsLogin = menu.findItem(R.id.menu_designer_news_login);
         if (designerNewsLogin != null) {
             designerNewsLogin.setTitle(designerNewsPrefs.isLoggedIn() ?
@@ -321,22 +319,11 @@ public class HomeActivity extends Activity {
                         .makeSceneTransitionAnimation(this).toBundle());
                 searchMenuView.setAlpha(0f);
                 return true;
-            case R.id.menu_dribbble_login:
-                if (!dribbblePrefs.isLoggedIn()) {
-                    dribbblePrefs.login(HomeActivity.this);
-                } else {
-                    dribbblePrefs.logout();
-                    // TODO something better than a toast!!
-                    Toast.makeText(getApplicationContext(), R.string.dribbble_logged_out, Toast
-                            .LENGTH_SHORT).show();
-                }
-                return true;
             case R.id.menu_designer_news_login:
                 if (!designerNewsPrefs.isLoggedIn()) {
                     startActivity(new Intent(this, DesignerNewsLogin.class));
                 } else {
-                    designerNewsPrefs.logout();
-                    // TODO something better than a toast!!
+                    AVUser.logOut();
                     Toast.makeText(getApplicationContext(), R.string.designer_news_logged_out,
                             Toast.LENGTH_SHORT).show();
                 }

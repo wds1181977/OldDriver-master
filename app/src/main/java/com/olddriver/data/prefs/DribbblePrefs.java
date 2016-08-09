@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.olddriver.BuildConfig;
+import com.olddriver.data.AVService;
 import com.olddriver.data.api.AuthInterceptor;
 import com.olddriver.data.api.dribbble.DribbbleService;
 import com.olddriver.data.api.dribbble.model.User;
@@ -98,7 +99,7 @@ public class DribbblePrefs {
     }
 
     public boolean isLoggedIn() {
-        return isLoggedIn;
+        return AVService.isLoggedIn();
 
     }
 

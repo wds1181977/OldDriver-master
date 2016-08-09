@@ -119,6 +119,18 @@ public class AVService {
         searchQuery.search();
     }
 
+    public static boolean isLoggedIn() {
+      boolean isLoggedIn=false;
+
+        if (AVUser.getCurrentUser() != null) {
+            isLoggedIn=true;
+        }else {
+
+            isLoggedIn=false;
+        }
+        return isLoggedIn;
+    }
+
 
 
     public static   void login(String username, String password  ) {

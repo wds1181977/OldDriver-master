@@ -83,6 +83,10 @@
     <string name="sign_up">Sign up</string>
     <string name="dn_login_action">Log in</string>
 
+    <!--signup_ -->
+    <string name="signup_failed">SignUp failed</string>
+    <string name="sign_up_city">city</string>
+
     <!-- dribble login -->
     <string name="dribbble_login_failed">Login failed</string>
 

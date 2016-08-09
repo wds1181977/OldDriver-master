@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.olddriver.BuildConfig;
+import com.olddriver.data.AVService;
 import com.olddriver.data.api.ClientAuthInterceptor;
 import com.olddriver.data.api.designernews.DesignerNewsService;
 import com.olddriver.data.api.designernews.model.User;
@@ -71,7 +72,7 @@ public class DesignerNewsPrefs {
     }
 
     public boolean isLoggedIn() {
-        return isLoggedIn;
+        return AVService.isLoggedIn();
     }
 
     public void setAccessToken(String accessToken) {

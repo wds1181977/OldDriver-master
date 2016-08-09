@@ -39,7 +39,6 @@
     <string name="new_story_url">Url</string>
     <string name="new_story_url_hint">Github地址</string>
     <string name="new_story_url_home">Github主页</string>
-    <string name="sign_up_city">城市</string>
     <string name="new_story_post">开始上传</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">设置</string>
@@ -52,7 +51,11 @@
     <string name="sign_up_to_olddriver">注册到老司机</string>
     <string name="change_avatar">设置头像</string>
     <string name="dn_login_action">登录</string>
+    <string name="designer_news_log_out">注销</string>
 
+   <!--signup_ -->
+    <string name="signup_failed">注册失败,账号或已存在</string>
+    <string name="sign_up_city">城市</string>
     <!-- dribble login -->
     <string name="dribbble_login_failed">登录失败</string>
 

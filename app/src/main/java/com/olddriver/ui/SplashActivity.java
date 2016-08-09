@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -13,12 +14,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,6 +32,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +66,8 @@ public class SplashActivity extends Activity  {
 
     public static final String VIDEO_NAME = "welcome_video.mp4";
     private static final int IMAGE_PICK_REQUEST = 0;
+    @BindView(R.id.container) ViewGroup container;
+    @BindView(R.id.loading) ProgressBar loading;
     @BindView(R.id.title) TextView title;
     @BindView(R.id.videoView) SplashVideoView mVideoView;
     @BindView(R.id.iv_avatar) ImageView ivAvatar;
@@ -201,8 +207,8 @@ public class SplashActivity extends Activity  {
 
     @OnClick(R.id.button_sign_up)
     void signUp() {
-
-       final String usernameStr = username.getText().toString().trim();
+        showLoading();
+        final String usernameStr = username.getText().toString().trim();
         final String passwordStr = password.getText().toString().trim();
         final String cityStr = city.getText().toString().trim();
         final String githubStr = github.getText().toString().trim();
@@ -211,36 +217,60 @@ public class SplashActivity extends Activity  {
             public void done(AVException e) {
 
                 if (e != null) {
+                    showLoginFailed(e);
                     Log.e("CreateUser", "Update User failed.", e);
+                }else {
+
+
+                    final Toast confirmLogin = new Toast(getApplicationContext());
+                    final View v = LayoutInflater.from(SplashActivity.this).inflate(R.layout
+                            .toast_logged_in_confirmation, null, false);
+                    ((TextView) v.findViewById(R.id.name)).setText(usernameStr);
+                    // need to use app context here as the activity will be destroyed shortly
+                    Glide.with(getApplicationContext())
+                            .load(avatar_uri)
+                            .placeholder(R.drawable.avatar_placeholder)
+                            .transform(new CircleTransform(getApplicationContext()))
+                            .into((ImageView) v.findViewById(R.id.avatar));
+                    v.findViewById(R.id.scrim).setBackground(ScrimUtil
+                            .makeCubicGradientScrimDrawable(
+                                    ContextCompat.getColor(SplashActivity.this, R.color.scrim),
+                                    5, Gravity.BOTTOM));
+                    confirmLogin.setView(v);
+                    confirmLogin.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
+                    confirmLogin.setDuration(Toast.LENGTH_LONG);
+                    confirmLogin.show();
+                    setResult(Activity.RESULT_OK);
+                    finish();
+
                 }
-
-
-                final Toast confirmLogin = new Toast(getApplicationContext());
-                final View v = LayoutInflater.from(SplashActivity.this).inflate(R.layout
-                        .toast_logged_in_confirmation, null, false);
-                ((TextView) v.findViewById(R.id.name)).setText(usernameStr);
-                // need to use app context here as the activity will be destroyed shortly
-                Glide.with(getApplicationContext())
-                        .load(avatar_uri)
-                        .placeholder(R.drawable.avatar_placeholder)
-                        .transform(new CircleTransform(getApplicationContext()))
-                        .into((ImageView) v.findViewById(R.id.avatar));
-                v.findViewById(R.id.scrim).setBackground(ScrimUtil
-                        .makeCubicGradientScrimDrawable(
-                                ContextCompat.getColor(SplashActivity.this, R.color.scrim),
-                                5, Gravity.BOTTOM));
-                confirmLogin.setView(v);
-                confirmLogin.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
-                confirmLogin.setDuration(Toast.LENGTH_LONG);
-                confirmLogin.show();
-                setResult(Activity.RESULT_OK);
-                finish();
 
 
             }
         }
        );
 
+    }
+    private void showLoading() {
+       TransitionManager.beginDelayedTransition(container);
+        container.setVisibility(View.GONE);
+        post.setVisibility(View.GONE);
+        loading.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoginFailed(AVException e) {
+        Resources res=getResources();
+        String Signupfailed= res.getString(R.string.signup_failed);
+        Snackbar.make(container, Signupfailed, Snackbar.LENGTH_SHORT).show();
+        showSignUp();
+        password.requestFocus();
+    }
+
+    private void showSignUp() {
+        TransitionManager.beginDelayedTransition(container);
+        container.setVisibility(View.VISIBLE);
+        post.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.GONE);
     }
 
 
