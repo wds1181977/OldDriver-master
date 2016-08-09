@@ -68,6 +68,7 @@ import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.GetCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -77,6 +78,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindDimen;
@@ -86,6 +88,7 @@ import com.olddriver.R;
 import com.olddriver.data.AVService;
 import com.olddriver.data.api.dribbble.DribbbleService;
 import com.olddriver.data.api.dribbble.ShotDAO;
+import com.olddriver.data.api.dribbble.UserDAO;
 import com.olddriver.data.api.dribbble.model.Comment;
 import com.olddriver.data.api.dribbble.model.Like;
 import com.olddriver.data.api.dribbble.model.Shot;
@@ -153,6 +156,8 @@ public class DribbbleShot extends Activity {
     private String mTitle;
     private String mGitHub_Url;
     private String mDescription;
+    private Date CreateAt;
+    private Date UpdatedAt;
     private int fabOffset;
     private DribbblePrefs dribbblePrefs;
     private boolean performingLike;
@@ -209,21 +214,21 @@ public class DribbbleShot extends Activity {
             ObjectId=intent.getStringExtra(EXTRA_SHOT_OBJECT_ID);
 
          //传递过来的 Shot需要 通过Id获取，并且重新查找属性
-            GetCallback<AVObject> getCallback=new GetCallback<AVObject>() {
+             AVService.fetchShotById(ObjectId, new GetCallback<AVObject>() {
                 @Override
                 public void done(AVObject shot, AVException arg1) {
                     if (shot != null) {
-                       mImageUrl= shot.getString(ShotDAO.IMAGE_URL);
+                        mImageUrl= shot.getString(ShotDAO.IMAGE_URL);
                         mTitle= shot.getString(ShotDAO.TITLE);
                         mGitHub_Url= shot.getString(ShotDAO.GITHUB_URL);
-                       mDescription= shot.getString(ShotDAO.DESCRIPTION);
+                        mDescription= shot.getString(ShotDAO.DESCRIPTION);
+                        CreateAt=shot.getCreatedAt();
+                        UpdatedAt=shot.getUpdatedAt();
                         bindShot(true, savedInstanceState != null);
 
                     }
                 }
-            };
-
-            AVService.fetchShotById(ObjectId, getCallback);
+            });
 
 
         } else if (intent.getData() != null) {
@@ -395,10 +400,10 @@ public class DribbbleShot extends Activity {
                 new ShareDribbbleImageTask(DribbbleShot.this, shot).execute();
             }
         });
-        if (shot.user != null) {
-            playerName.setText(shot.user.name.toLowerCase());
+        if (AVService.isLoggedIn()) {
+            playerName.setText(AVUser.getCurrentUser().getUsername());
             Glide.with(this)
-                    .load(shot.user.getHighQualityAvatarUrl())
+                    .load(AVUser.getCurrentUser().getString(UserDAO.AVATRR_URL))
                     .transform(circleTransform)
                     .placeholder(R.drawable.avatar_placeholder)
                     .override(largeAvatarSize, largeAvatarSize)
@@ -407,14 +412,14 @@ public class DribbbleShot extends Activity {
                 @Override
                 public void onClick(View v) {
                     Intent player = new Intent(DribbbleShot.this, PlayerActivity.class);
-                    if (shot.user.shots_count > 0) { // legit user object
-                        player.putExtra(PlayerActivity.EXTRA_PLAYER, shot.user);
-                    } else {
-                        // search doesn't fully populate the user object,
-                        // in this case send the ID not the full user
-                        player.putExtra(PlayerActivity.EXTRA_PLAYER_NAME, shot.user.username);
-                        player.putExtra(PlayerActivity.EXTRA_PLAYER_ID, shot.user.id);
-                    }
+//                    if (shot.user.shots_count > 0) { // legit user object
+//                        player.putExtra(PlayerActivity.EXTRA_PLAYER, shot.user);
+//                    } else {
+//                        // search doesn't fully populate the user object,
+//                        // in this case send the ID not the full user
+//                        player.putExtra(PlayerActivity.EXTRA_PLAYER_NAME, shot.user.username);
+//                        player.putExtra(PlayerActivity.EXTRA_PLAYER_ID, shot.user.id);
+//                    }
                     ActivityOptions options =
                             ActivityOptions.makeSceneTransitionAnimation(DribbbleShot.this,
                                     playerAvatar, getString(R.string.transition_player_avatar));
@@ -423,8 +428,8 @@ public class DribbbleShot extends Activity {
             };
             playerAvatar.setOnClickListener(playerClick);
             playerName.setOnClickListener(playerClick);
-            if (shot.created_at != null) {
-                shotTimeAgo.setText(DateUtils.getRelativeTimeSpanString(shot.created_at.getTime(),
+            if (UpdatedAt != null) {
+                shotTimeAgo.setText(DateUtils.getRelativeTimeSpanString(UpdatedAt.getTime(),
                         System.currentTimeMillis(),
                         DateUtils.SECOND_IN_MILLIS)
                         .toString().toLowerCase());

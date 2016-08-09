@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVUser;
 import com.bumptech.glide.Glide;
 
 import java.text.NumberFormat;
@@ -46,7 +47,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.olddriver.R;
+import com.olddriver.data.AVService;
 import com.olddriver.data.api.dribbble.PlayerShotsDataManager;
+import com.olddriver.data.api.dribbble.UserDAO;
 import com.olddriver.data.api.dribbble.model.Shot;
 import com.olddriver.data.api.dribbble.model.User;
 import com.olddriver.data.pocket.PocketUtils;
@@ -101,7 +104,7 @@ public class PlayerActivity extends Activity {
         ButterKnife.bind(this);
         circleTransform = new CircleTransform(this);
         chromeFader = new ElasticDragDismissFrameLayout.SystemChromeFader(this);
-
+        bindPlayer();
         final Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_PLAYER)) {
             player = intent.getParcelableExtra(EXTRA_PLAYER);
@@ -161,7 +164,7 @@ public class PlayerActivity extends Activity {
     }
 
     private void bindPlayer() {
-        if (player == null) {
+        if (!AVService.isLoggedIn()) {
             return;
         }
 
@@ -169,112 +172,113 @@ public class PlayerActivity extends Activity {
         final NumberFormat nf = NumberFormat.getInstance();
 
         Glide.with(this)
-                .load(player.getHighQualityAvatarUrl())
+                .load(AVUser.getCurrentUser().getString(UserDAO.AVATRR_URL))
                 .placeholder(R.drawable.avatar_placeholder)
                 .transform(circleTransform)
                 .into(avatar);
-        playerName.setText(player.name.toLowerCase());
-        if (!TextUtils.isEmpty(player.bio)) {
-            DribbbleUtils.parseAndSetText(bio, player.bio);
-        } else {
-            bio.setVisibility(View.GONE);
-        }
+        playerName.setText(AVUser.getCurrentUser().getUsername());
 
-        shotCount.setText(res.getQuantityString(R.plurals.shots, player.shots_count,
-                nf.format(player.shots_count)));
-        if (player.shots_count == 0) {
-            shotCount.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    null, getDrawable(R.drawable.avd_no_shots), null, null);
-        }
-        setFollowerCount(player.followers_count);
-        likesCount.setText(res.getQuantityString(R.plurals.likes, player.likes_count,
-                nf.format(player.likes_count)));
+//        if (!TextUtils.isEmpty(player.bio)) {
+//            DribbbleUtils.parseAndSetText(bio, player.bio);
+//        } else {
+//            bio.setVisibility(View.GONE);
+//        }
 
-        // load the users shots
-        dataManager = new PlayerShotsDataManager(this, player) {
-            @Override
-            public void onDataLoaded(List<Shot> data) {
-                if (data != null && data.size() > 0) {
-                    if (adapter.getDataItemCount() == 0) {
-                        loading.setVisibility(View.GONE);
-                        ViewUtils.setPaddingTop(shots, playerDescription.getHeight());
-                    }
-                  //  adapter.addAndResort(data);
-                }
-            }
-        };
-        adapter = new FeedAdapter(this, dataManager, columns, PocketUtils.isPocketInstalled(this));
-        shots.setAdapter(adapter);
-        shots.setItemAnimator(new SlideInItemAnimator());
-        shots.setVisibility(View.VISIBLE);
-        layoutManager = new GridLayoutManager(this, columns);
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                return adapter.getItemColumnSpan(position);
-            }
-        });
-        shots.setLayoutManager(layoutManager);
-        shots.addOnScrollListener(new InfiniteScrollListener(layoutManager, dataManager) {
-            @Override
-            public void onLoadMore() {
-                dataManager.loadData();
-            }
-        });
-        shots.setHasFixedSize(true);
-
-        // forward on any clicks above the first item in the grid (i.e. in the paddingTop)
-        // to 'pass through' to the view behind
-        shots.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                final int firstVisible = layoutManager.findFirstVisibleItemPosition();
-                if (firstVisible > 0) return false;
-
-                // if no data loaded then pass through
-                if (adapter.getDataItemCount() == 0) {
-                    return playerDescription.dispatchTouchEvent(event);
-                }
-
-                final RecyclerView.ViewHolder vh = shots.findViewHolderForAdapterPosition(0);
-                if (vh == null) return false;
-                final int firstTop = vh.itemView.getTop();
-                if (event.getY() < firstTop) {
-                     return playerDescription.dispatchTouchEvent(event);
-                }
-                return false;
-            }
-        });
-
-        // check if following
-        if (dataManager.getDribbblePrefs().isLoggedIn()) {
-            if (player.id == dataManager.getDribbblePrefs().getUserId()) {
-                TransitionManager.beginDelayedTransition(playerDescription);
-                follow.setVisibility(View.GONE);
-                ViewUtils.setPaddingTop(shots, playerDescription.getHeight() - follow.getHeight()
-                        - ((ViewGroup.MarginLayoutParams) follow.getLayoutParams()).bottomMargin);
-            } else {
-                final Call<Void> followingCall = dataManager.getDribbbleApi().following(player.id);
-                followingCall.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        following = response.isSuccessful();
-                        if (!following) return;
-                        TransitionManager.beginDelayedTransition(playerDescription);
-                        follow.setText(R.string.following);
-                        follow.setActivated(true);
-                    }
-
-                    @Override public void onFailure(Call<Void> call, Throwable t) { }
-                });
-            }
-        }
-
-        if (player.shots_count > 0) {
-            dataManager.loadData(); // kick off initial load
-        } else {
-            loading.setVisibility(View.GONE);
-        }
+//        shotCount.setText(res.getQuantityString(R.plurals.shots, player.shots_count,
+//                nf.format(player.shots_count)));
+//        if (player.shots_count == 0) {
+//            shotCount.setCompoundDrawablesRelativeWithIntrinsicBounds(
+//                    null, getDrawable(R.drawable.avd_no_shots), null, null);
+//        }
+//        setFollowerCount(player.followers_count);
+//        likesCount.setText(res.getQuantityString(R.plurals.likes, player.likes_count,
+//                nf.format(player.likes_count)));
+//
+//        // load the users shots
+//        dataManager = new PlayerShotsDataManager(this, player) {
+//            @Override
+//            public void onDataLoaded(List<Shot> data) {
+//                if (data != null && data.size() > 0) {
+//                    if (adapter.getDataItemCount() == 0) {
+//                        loading.setVisibility(View.GONE);
+//                        ViewUtils.setPaddingTop(shots, playerDescription.getHeight());
+//                    }
+//                  //  adapter.addAndResort(data);
+//                }
+//            }
+//        };
+//        adapter = new FeedAdapter(this, dataManager, columns, PocketUtils.isPocketInstalled(this));
+//        shots.setAdapter(adapter);
+//        shots.setItemAnimator(new SlideInItemAnimator());
+//        shots.setVisibility(View.VISIBLE);
+//        layoutManager = new GridLayoutManager(this, columns);
+//        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//            @Override
+//            public int getSpanSize(int position) {
+//                return adapter.getItemColumnSpan(position);
+//            }
+//        });
+//        shots.setLayoutManager(layoutManager);
+//        shots.addOnScrollListener(new InfiniteScrollListener(layoutManager, dataManager) {
+//            @Override
+//            public void onLoadMore() {
+//                dataManager.loadData();
+//            }
+//        });
+//        shots.setHasFixedSize(true);
+//
+//        // forward on any clicks above the first item in the grid (i.e. in the paddingTop)
+//        // to 'pass through' to the view behind
+//        shots.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                final int firstVisible = layoutManager.findFirstVisibleItemPosition();
+//                if (firstVisible > 0) return false;
+//
+//                // if no data loaded then pass through
+//                if (adapter.getDataItemCount() == 0) {
+//                    return playerDescription.dispatchTouchEvent(event);
+//                }
+//
+//                final RecyclerView.ViewHolder vh = shots.findViewHolderForAdapterPosition(0);
+//                if (vh == null) return false;
+//                final int firstTop = vh.itemView.getTop();
+//                if (event.getY() < firstTop) {
+//                     return playerDescription.dispatchTouchEvent(event);
+//                }
+//                return false;
+//            }
+//        });
+//
+//        // check if following
+//        if (dataManager.getDribbblePrefs().isLoggedIn()) {
+//            if (player.id == dataManager.getDribbblePrefs().getUserId()) {
+//                TransitionManager.beginDelayedTransition(playerDescription);
+//                follow.setVisibility(View.GONE);
+//                ViewUtils.setPaddingTop(shots, playerDescription.getHeight() - follow.getHeight()
+//                        - ((ViewGroup.MarginLayoutParams) follow.getLayoutParams()).bottomMargin);
+//            } else {
+//                final Call<Void> followingCall = dataManager.getDribbbleApi().following(player.id);
+//                followingCall.enqueue(new Callback<Void>() {
+//                    @Override
+//                    public void onResponse(Call<Void> call, Response<Void> response) {
+//                        following = response.isSuccessful();
+//                        if (!following) return;
+//                        TransitionManager.beginDelayedTransition(playerDescription);
+//                        follow.setText(R.string.following);
+//                        follow.setActivated(true);
+//                    }
+//
+//                    @Override public void onFailure(Call<Void> call, Throwable t) { }
+//                });
+//            }
+//        }
+//
+//        if (player.shots_count > 0) {
+//            dataManager.loadData(); // kick off initial load
+//        } else {
+//            loading.setVisibility(View.GONE);
+//        }
     }
 
     private void loadPlayer(long userId) {
