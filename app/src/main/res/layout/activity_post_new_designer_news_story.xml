@@ -73,7 +73,6 @@
                 <com.olddriver.ui.widget.BaselineGridTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:paddingStart="@dimen/padding_normal"
                     android:paddingEnd="@dimen/padding_normal"
                     android:text="@string/new_story_instructions"

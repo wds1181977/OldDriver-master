@@ -92,7 +92,7 @@
                     android:textColor="@android:color/white" />
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/new_story_title_label"
+                    android:id="@+id/sign_up_username_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/padding_normal"
@@ -133,7 +133,7 @@
                     android:textColor="@android:color/white" />
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/new_story_url_label"
+                    android:id="@+id/sign_up_password_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/padding_normal"
@@ -172,11 +172,11 @@
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:paddingEnd="@dimen/padding_normal"
                     android:paddingStart="@dimen/padding_normal"
-                    android:text="@string/new_story_city"
+                    android:text="@string/sign_up_city"
                     android:textColor="@android:color/white" />
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/new_story_city"
+                    android:id="@+id/sign_up_city_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/padding_normal"
@@ -191,7 +191,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:gravity="top"
-                        android:hint="@string/new_story_city"
+                        android:hint="@string/sign_up_city"
                         android:imeOptions="actionSend"
                         android:inputType="textUri"
                         android:singleLine="true"
@@ -219,7 +219,7 @@
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/new_story_comment_label2"
+                    android:id="@+id/sign_up_github_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/padding_normal"
@@ -252,9 +252,6 @@
 
 
             </LinearLayout>
-
-
-
 
         </com.olddriver.ui.widget.ObservableScrollView>
 

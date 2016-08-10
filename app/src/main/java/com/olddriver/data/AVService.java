@@ -1,6 +1,7 @@
 package com.olddriver.data;
 import android.content.Context;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -15,6 +16,7 @@ import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.search.AVSearchQuery;
+import com.olddriver.data.api.dribbble.UserDAO;
 import com.olddriver.data.api.dribbble.model.Images;
 import com.olddriver.data.api.dribbble.model.Shot;
 import com.olddriver.util.ImageUtils;
@@ -133,22 +135,55 @@ public class AVService {
         }
     }
 
-    public static  void register(String username, String password) {
+    public static  void register(final String username,final String password,final String cityStr,final String githubStr,final Uri avatar_uri,final SaveCallback saveCallback) {
+      final  AVUser user = new AVUser();
 
-        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-            AVUser user = new AVUser();
-            user.setUsername(username);
-            user.setPassword(password);
-            user.saveInBackground(new SaveCallback() {
+
+        String name = System.currentTimeMillis()+"";
+        if (avatar_uri != null) {
+
+            byte[] data = ImageUtils.readFile(mContext,avatar_uri);
+            final AVFile file = new AVFile(name, data);
+
+            file.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(AVException e) {
-//                    if (filterException(e)) {
-//                        onSucceed();
-//                    }
+                    if (e != null) {
+                        Log.d("wds",e.toString());
+
+                    } else {
+                        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+
+                            user.setUsername(username);
+                            user.setPassword(password);
+                        }
+                        user.put(UserDAO.LOCATION,cityStr);
+                        user.put(UserDAO.GITHUB_URL,githubStr);
+                        user.put(UserDAO.AVATRR_URL, file.getUrl());
+                        user.saveInBackground(saveCallback);
+                    }
                 }
             });
+        }else {
+
+            if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+
+                user.setUsername(username);
+                user.setPassword(password);
+
+            }
+            user.put(UserDAO.LOCATION,cityStr);
+            user.put(UserDAO.GITHUB_URL,githubStr);
+            user.saveInBackground(saveCallback);
+
         }
+
+
+
     }
+
+
+
 
 
 

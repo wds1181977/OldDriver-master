@@ -16,8 +16,8 @@
 
 
     <string name="pick">上传</string>
-    <string name="status_addImage">添加图片</string>
-    <string name="status_cancelImage">取消图片</string>
+    <string name="status_addImage">设置头像</string>
+    <string name="status_cancelImage">取消头像</string>
 
 
     <string name="about">关于</string>
@@ -39,7 +39,7 @@
     <string name="new_story_url">Url</string>
     <string name="new_story_url_hint">Github地址</string>
     <string name="new_story_url_home">Github主页</string>
-    <string name="new_story_city">城市</string>
+    <string name="sign_up_city">城市</string>
     <string name="new_story_post">开始上传</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">设置</string>
