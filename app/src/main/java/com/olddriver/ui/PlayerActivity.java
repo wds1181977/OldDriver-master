@@ -27,6 +27,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,10 +112,11 @@ public class PlayerActivity extends Activity {
         chromeFader = new ElasticDragDismissFrameLayout.SystemChromeFader(this);
        // bindPlayer();
         final Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_PLAYER_ID)) {
-          String ObjectId = intent.getParcelableExtra(EXTRA_PLAYER_ID);
-            loadPlayerById(ObjectId);
+        if (intent.hasExtra(EXTRA_PLAYER_USERNAME)) {
+           avatar_url = intent.getStringExtra(EXTRA_PLAYER_AVATAR);
+             username = intent.getStringExtra(EXTRA_PLAYER_USERNAME);
 
+            bindPlayer();
 
         }
 // else if (intent.hasExtra(EXTRA_PLAYER_NAME)) {
@@ -287,14 +289,21 @@ public class PlayerActivity extends Activity {
     }
 
 
-    private void loadPlayerById(String userId) {
+    private void loadPlayerById(final String userId) {
         AVService.fetchAVUserById(userId, new GetCallback<AVObject>() {
             @Override
-            public void done(AVObject avuser, AVException arg1) {
-                if (avuser != null) {
-                    username=avuser.getString(UserDAO.NAME);
-                    avatar_url=avuser.getString(UserDAO.AVATAR_URL);
-                    bindPlayer();
+            public void done(AVObject avuser, AVException e) {
+
+                if(e!=null){
+                    Log.d("wdsy",e.getMessage()+"/"+userId);
+
+                }else {
+                    if (avuser != null) {
+                        username = avuser.getString(UserDAO.NAME);
+                        avatar_url = avuser.getString(UserDAO.AVATAR_URL);
+                        bindPlayer();
+                    }
+
                 }
             }
         });

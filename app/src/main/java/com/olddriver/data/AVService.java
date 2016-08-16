@@ -56,17 +56,13 @@ public class AVService {
 
 
     public static void fetchShotById(String objectId,GetCallback<AVObject> getCallback) {
-        Shot shot = new Shot();
-        shot.setObjectId(objectId);
-        // 通过Fetch获取content内容
-        shot.fetchInBackground(getCallback);
+      AVObject shot = AVObject.createWithoutData("Shot", objectId);
+       shot.fetchInBackground(getCallback) ;
     }
 
 
     public static void fetchAVUserById(String objectId,GetCallback<AVObject> getCallback) {
-        AVUser user = new AVUser();
-        user.setObjectId(objectId);
-        // 通过Fetch获取content内容
+        AVObject user = AVObject.createWithoutData("AVUser", objectId);
         user.fetchInBackground(getCallback);
     }
 
