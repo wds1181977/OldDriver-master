@@ -36,7 +36,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.GetCallback;
 import com.bumptech.glide.Glide;
 
 import java.text.NumberFormat;
@@ -74,8 +77,10 @@ public class PlayerActivity extends Activity {
     public static final String EXTRA_PLAYER_NAME = "EXTRA_PLAYER_NAME";
     public static final String EXTRA_PLAYER_ID = "EXTRA_PLAYER_ID";
     public static final String EXTRA_PLAYER_USERNAME = "EXTRA_PLAYER_USERNAME";
-
+    public static final String EXTRA_PLAYER_AVATAR="EXTRA_PLAYER_AVATAR";
     private User player;
+    private String avatar_url;
+    private String username;
     private CircleTransform circleTransform;
     private PlayerShotsDataManager dataManager;
     private FeedAdapter adapter;
@@ -104,12 +109,15 @@ public class PlayerActivity extends Activity {
         ButterKnife.bind(this);
         circleTransform = new CircleTransform(this);
         chromeFader = new ElasticDragDismissFrameLayout.SystemChromeFader(this);
-        bindPlayer();
+       // bindPlayer();
         final Intent intent = getIntent();
-//        if (intent.hasExtra(EXTRA_PLAYER)) {
-//            player = intent.getParcelableExtra(EXTRA_PLAYER);
-//            bindPlayer();
-//        } else if (intent.hasExtra(EXTRA_PLAYER_NAME)) {
+        if (intent.hasExtra(EXTRA_PLAYER_ID)) {
+          String ObjectId = intent.getParcelableExtra(EXTRA_PLAYER_ID);
+            loadPlayerById(ObjectId);
+
+
+        }
+// else if (intent.hasExtra(EXTRA_PLAYER_NAME)) {
 //            String name = intent.getStringExtra(EXTRA_PLAYER_NAME);
 //            playerName.setText(name);
 //            if (intent.hasExtra(EXTRA_PLAYER_ID)) {
@@ -164,19 +172,16 @@ public class PlayerActivity extends Activity {
     }
 
     private void bindPlayer() {
-        if (!AVService.isLoggedIn()) {
-            return;
-        }
 
         final Resources res = getResources();
         final NumberFormat nf = NumberFormat.getInstance();
 
         Glide.with(this)
-                .load(AVUser.getCurrentUser().getString(UserDAO.AVATAR_URL))
+                .load(avatar_url)
                 .placeholder(R.drawable.avatar_placeholder)
                 .transform(circleTransform)
                 .into(avatar);
-        playerName.setText(AVUser.getCurrentUser().getUsername());
+        playerName.setText(username);
 
 //        if (!TextUtils.isEmpty(player.bio)) {
 //            DribbbleUtils.parseAndSetText(bio, player.bio);
@@ -279,6 +284,20 @@ public class PlayerActivity extends Activity {
 //        } else {
 //            loading.setVisibility(View.GONE);
 //        }
+    }
+
+
+    private void loadPlayerById(String userId) {
+        AVService.fetchAVUserById(userId, new GetCallback<AVObject>() {
+            @Override
+            public void done(AVObject avuser, AVException arg1) {
+                if (avuser != null) {
+                    username=avuser.getString(UserDAO.NAME);
+                    avatar_url=avuser.getString(UserDAO.AVATAR_URL);
+                    bindPlayer();
+                }
+            }
+        });
     }
 
     private void loadPlayer(long userId) {

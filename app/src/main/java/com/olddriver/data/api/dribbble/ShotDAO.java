@@ -11,6 +11,7 @@ public class ShotDAO {
     public final static String GITHUB_URL = "github_url";
     public final static String DESCRIPTION="description";
     public final static String IMAGE_URL = "image_url";
+    public final static String USER_ID = "user_id";
     public final static String USER_AVATAR= "avatar_url";
     public final static String USER_NAME= "user_name";
 

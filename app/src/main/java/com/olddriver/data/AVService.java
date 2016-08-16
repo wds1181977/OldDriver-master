@@ -100,6 +100,8 @@ public class AVService {
         final Shot shot = new Shot();
         String avatar=AVUser.getCurrentUser().getString(UserDAO.AVATAR_URL);
         String username=AVUser.getCurrentUser().getUsername();
+        String userId=AVUser.getCurrentUser().getObjectId();
+        shot.setUserID(userId);
         shot.setUserAvatar(avatar);
         shot.setUserName(username);
         shot.setTitle(title);

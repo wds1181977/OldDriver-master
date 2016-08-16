@@ -44,6 +44,7 @@ public class Shot extends AVObject  {
     private static final int[] TWO_X_IMAGE_SIZE = new int[] { 800, 600 };
     public String hidpi;
     public  String normal;
+    public  String  user_id;
     public  String avatar_url;
     public  String user_name;
     public  String description;
@@ -87,6 +88,7 @@ public class Shot extends AVObject  {
     }
 
     public Shot(long id,
+                String user_id,
                 String avatar_url,
                 String user_name,
                 String title,
@@ -116,6 +118,7 @@ public class Shot extends AVObject  {
                 User user,
                 Team team) {
         super();
+        this.user_id=user_id;
         this.avatar_url=avatar_url;
         this.user_name=user_name;
         this.title=title;
@@ -144,6 +147,15 @@ public class Shot extends AVObject  {
         this.tags = tags;
         this.user = user;
         this.team = team;
+    }
+
+    public void setUserID(String user_id) {
+
+        this.put(ShotDAO.USER_ID, user_id);
+    }
+
+    public String getUserID() {
+        return this.getString(ShotDAO.USER_ID);
     }
 
     public void setUserName(String user_name) {
@@ -215,6 +227,7 @@ public class Shot extends AVObject  {
 
     protected Shot(Parcel in) {
         super();
+        user_id=in.readString();
         avatar_url=in.readString();
         user_name=in.readString();
         title=in.readString();
@@ -260,6 +273,7 @@ public class Shot extends AVObject  {
 
     public static class Builder {
         private long id;
+        private String user_id;
         private String title;
         private String avatar_url;
         private String user_name;
@@ -416,7 +430,7 @@ public class Shot extends AVObject  {
         }
 
         public Shot build() {
-            return new Shot(id, avatar_url,user_name,title,content,imgae_url, description, width, height, images, views_count,
+            return new Shot(id,user_id, avatar_url,user_name,title,content,imgae_url, description, width, height, images, views_count,
                     likes_count, comments_count, attachments_count, rebounds_count,
                     buckets_count, created_at, updated_at, html_url, attachments_url,
                     buckets_url, comments_url, likes_url, projects_url, rebounds_url, animated,
@@ -448,7 +462,7 @@ public class Shot extends AVObject  {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(user_id);
         dest.writeString(avatar_url);
         dest.writeString(user_name);
         dest.writeString(title);

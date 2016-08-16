@@ -152,6 +152,7 @@ public class DribbbleShot extends Activity {
     private String ObjectId;
 
     public Spanned mParsedDescription;
+    private String mUserID;
     private String mUserAvatar;
     private String mUserName;
     private String mImageUrl;
@@ -216,25 +217,7 @@ public class DribbbleShot extends Activity {
             shot = intent.getParcelableExtra(EXTRA_SHOT);
             ObjectId=intent.getStringExtra(EXTRA_SHOT_OBJECT_ID);
 
-         //传递过来的 Shot需要 通过Id获取，并且重新查找属性
-             AVService.fetchShotById(ObjectId, new GetCallback<AVObject>() {
-                @Override
-                public void done(AVObject shot, AVException arg1) {
-                    if (shot != null) {
-                        mUserAvatar=shot.getString(ShotDAO.USER_AVATAR);
-                        mUserName=shot.getString(ShotDAO.USER_NAME);
-                        mImageUrl= shot.getString(ShotDAO.IMAGE_URL);
-                        mTitle= shot.getString(ShotDAO.TITLE);
-                        mGitHub_Url= shot.getString(ShotDAO.GITHUB_URL);
-                        mDescription= shot.getString(ShotDAO.DESCRIPTION);
-                        CreateAt=shot.getCreatedAt();
-                        UpdatedAt=shot.getUpdatedAt();
-                        bindShot(true, savedInstanceState != null);
-
-                    }
-                }
-            });
-
+            loadShot(ObjectId,savedInstanceState);
 
         } else if (intent.getData() != null) {
             final HttpUrl url = HttpUrl.parse(intent.getDataString());
@@ -313,6 +296,29 @@ public class DribbbleShot extends Activity {
     @Override @TargetApi(Build.VERSION_CODES.M)
     public void onProvideAssistContent(AssistContent outContent) {
         outContent.setWebUri(Uri.parse(shot.url));
+    }
+
+    private void loadShot(String objectId,final Bundle savedInstanceState){
+        //传递过来的 Shot需要 通过Id获取，并且重新查找属性
+        AVService.fetchShotById(objectId, new GetCallback<AVObject>() {
+            @Override
+            public void done(AVObject shot, AVException arg1) {
+                if (shot != null) {
+                    mUserID=shot.getString(ShotDAO.USER_ID);
+                    mUserAvatar=shot.getString(ShotDAO.USER_AVATAR);
+                    mUserName=shot.getString(ShotDAO.USER_NAME);
+                    mImageUrl= shot.getString(ShotDAO.IMAGE_URL);
+                    mTitle= shot.getString(ShotDAO.TITLE);
+                    mGitHub_Url= shot.getString(ShotDAO.GITHUB_URL);
+                    mDescription= shot.getString(ShotDAO.DESCRIPTION);
+                    CreateAt=shot.getCreatedAt();
+                    UpdatedAt=shot.getUpdatedAt();
+                    bindShot(true, savedInstanceState != null);
+
+                }
+            }
+        });
+
     }
 
     private void bindShot(final boolean postponeEnterTransition, final boolean animateFabManually) {
@@ -427,6 +433,11 @@ public class DribbbleShot extends Activity {
 //                        player.putExtra(PlayerActivity.EXTRA_PLAYER_NAME, shot.user.username);
 //                        player.putExtra(PlayerActivity.EXTRA_PLAYER_ID, shot.user.id);
 //                    }
+
+
+                            player.putExtra(PlayerActivity.EXTRA_PLAYER_ID,mUserID);
+                            player.putExtra(PlayerActivity.EXTRA_PLAYER_USERNAME,mUserName);
+                            player.putExtra(PlayerActivity.EXTRA_PLAYER_AVATAR,mUserAvatar);
                             ActivityOptions options =
                                     ActivityOptions.makeSceneTransitionAnimation(DribbbleShot.this,
                                             playerAvatar, getString(R.string.transition_player_avatar));
