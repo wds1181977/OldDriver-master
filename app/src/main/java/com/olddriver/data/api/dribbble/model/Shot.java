@@ -31,6 +31,7 @@ import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVObject;
 import com.olddriver.data.PlaidItem;
 import com.olddriver.data.api.dribbble.ShotDAO;
+import com.olddriver.data.api.dribbble.UserDAO;
 import com.olddriver.util.DribbbleUtils;
 
 /**
@@ -43,7 +44,8 @@ public class Shot extends AVObject  {
     private static final int[] TWO_X_IMAGE_SIZE = new int[] { 800, 600 };
     public String hidpi;
     public  String normal;
-    public  String teaser;
+    public  String avatar_url;
+    public  String user_name;
     public  String description;
     public  String github_url ;
     public  String image_url;
@@ -85,6 +87,8 @@ public class Shot extends AVObject  {
     }
 
     public Shot(long id,
+                String avatar_url,
+                String user_name,
                 String title,
                 String description,
                 String github_url,
@@ -112,6 +116,8 @@ public class Shot extends AVObject  {
                 User user,
                 Team team) {
         super();
+        this.avatar_url=avatar_url;
+        this.user_name=user_name;
         this.title=title;
         this.description = description;
         this.github_url=github_url;
@@ -140,10 +146,31 @@ public class Shot extends AVObject  {
         this.team = team;
     }
 
+    public void setUserName(String user_name) {
+
+        this.put(ShotDAO.USER_NAME, user_name);
+    }
+
+    public String getUserName() {
+        return this.getString(ShotDAO.USER_NAME);
+    }
+
+    public void setUserAvatar(String avatar_url) {
+
+        this.put(ShotDAO.USER_AVATAR, avatar_url);
+    }
+
+    public String getUserAvatar() {
+        return this.getString(ShotDAO.USER_AVATAR);
+    }
+
+
+
+
     public void setTitle(String title) {
 
 
-        this.put(ShotDAO.IMAGE_URL, title);
+        this.put(ShotDAO.TITLE, title);
     }
 
     public String getTitle() {
@@ -188,6 +215,8 @@ public class Shot extends AVObject  {
 
     protected Shot(Parcel in) {
         super();
+        avatar_url=in.readString();
+        user_name=in.readString();
         title=in.readString();
         description = in.readString();
         github_url=in.readString();
@@ -232,6 +261,8 @@ public class Shot extends AVObject  {
     public static class Builder {
         private long id;
         private String title;
+        private String avatar_url;
+        private String user_name;
         private String content;
         private String imgae_url;
         private String description;
@@ -385,7 +416,7 @@ public class Shot extends AVObject  {
         }
 
         public Shot build() {
-            return new Shot(id, title,content,imgae_url, description, width, height, images, views_count,
+            return new Shot(id, avatar_url,user_name,title,content,imgae_url, description, width, height, images, views_count,
                     likes_count, comments_count, attachments_count, rebounds_count,
                     buckets_count, created_at, updated_at, html_url, attachments_url,
                     buckets_url, comments_url, likes_url, projects_url, rebounds_url, animated,
@@ -418,7 +449,8 @@ public class Shot extends AVObject  {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-
+        dest.writeString(avatar_url);
+        dest.writeString(user_name);
         dest.writeString(title);
         dest.writeString(image_url);
         dest.writeString(description);

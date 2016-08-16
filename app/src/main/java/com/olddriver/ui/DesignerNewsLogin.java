@@ -200,7 +200,7 @@ public class DesignerNewsLogin extends Activity {
                 ((TextView) v.findViewById(R.id.name)).setText(avUser.getUsername());
                 // need to use app context here as the activity will be destroyed shortly
                 Glide.with(getApplicationContext())
-                        .load(avUser.getString(UserDAO.AVATRR_URL))
+                        .load(avUser.getString(UserDAO.AVATAR_URL))
                         .placeholder(R.drawable.avatar_placeholder)
                         .transform(new CircleTransform(getApplicationContext()))
                         .into((ImageView) v.findViewById(R.id.avatar));

@@ -76,27 +76,33 @@ public class PostStoryService extends IntentService {
                 @Override
                 public void done(AVException e) {
                     // done方法一定在UI线程执行
+
                     if (e != null) {
-                        Log.e("CreateTodo", "Update todo failed.", e);
+                        Log.e("wds", "Update todo failed.", e);
                         final String reason = e.getMessage();
                         if (broadcastResult) {
                         final Intent failure = new Intent(BROADCAST_ACTION_FAILURE);
                         failure.putExtra(BROADCAST_ACTION_FAILURE_REASON, reason);
                         LocalBroadcastManager.getInstance(getApplicationContext())
                             .sendBroadcast(failure);
+                            Toast.makeText(getApplicationContext(), reason, Toast.LENGTH_SHORT).show();
                         } else {
+
+                            Log.e("wds", "Update todo failed.", e);
                         Toast.makeText(getApplicationContext(), reason, Toast.LENGTH_SHORT).show();
                         }
-                    }
-                 //上传成功发送广播通知更新UI
-                    if (broadcastResult) {
-                        final Intent success = new Intent(BROADCAST_ACTION_SUCCESS);
+                    }else {
+                        //上传成功发送广播通知更新UI
+                        if (broadcastResult) {
+                            final Intent success = new Intent(BROADCAST_ACTION_SUCCESS);
 
-                        LocalBroadcastManager.getInstance(getApplicationContext())
-                                .sendBroadcast(success);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Story posted",
-                                Toast.LENGTH_SHORT).show();
+                            LocalBroadcastManager.getInstance(getApplicationContext())
+                                    .sendBroadcast(success);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Story posted",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
                     }
 
 

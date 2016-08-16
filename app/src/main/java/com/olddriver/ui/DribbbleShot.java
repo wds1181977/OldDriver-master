@@ -152,12 +152,15 @@ public class DribbbleShot extends Activity {
     private String ObjectId;
 
     public Spanned mParsedDescription;
+    private String mUserAvatar;
+    private String mUserName;
     private String mImageUrl;
     private String mTitle;
     private String mGitHub_Url;
     private String mDescription;
     private Date CreateAt;
     private Date UpdatedAt;
+    private String username;
     private int fabOffset;
     private DribbblePrefs dribbblePrefs;
     private boolean performingLike;
@@ -218,6 +221,8 @@ public class DribbbleShot extends Activity {
                 @Override
                 public void done(AVObject shot, AVException arg1) {
                     if (shot != null) {
+                        mUserAvatar=shot.getString(ShotDAO.USER_AVATAR);
+                        mUserName=shot.getString(ShotDAO.USER_NAME);
                         mImageUrl= shot.getString(ShotDAO.IMAGE_URL);
                         mTitle= shot.getString(ShotDAO.TITLE);
                         mGitHub_Url= shot.getString(ShotDAO.GITHUB_URL);
@@ -400,18 +405,20 @@ public class DribbbleShot extends Activity {
                 new ShareDribbbleImageTask(DribbbleShot.this, shot).execute();
             }
         });
-        if (AVService.isLoggedIn()) {
-            playerName.setText(AVUser.getCurrentUser().getUsername());
-            Glide.with(this)
-                    .load(AVUser.getCurrentUser().getString(UserDAO.AVATRR_URL))
-                    .transform(circleTransform)
-                    .placeholder(R.drawable.avatar_placeholder)
-                    .override(largeAvatarSize, largeAvatarSize)
-                    .into(playerAvatar);
-            View.OnClickListener playerClick = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent player = new Intent(DribbbleShot.this, PlayerActivity.class);
+
+
+                if (mUserName!=null) {
+                    playerName.setText(mUserName);
+                    Glide.with(DribbbleShot.this)
+                            .load(mUserAvatar)
+                            .transform(circleTransform)
+                            .placeholder(R.drawable.avatar_placeholder)
+                            .override(largeAvatarSize, largeAvatarSize)
+                            .into(playerAvatar);
+                    View.OnClickListener playerClick = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent player = new Intent(DribbbleShot.this, PlayerActivity.class);
 //                    if (shot.user.shots_count > 0) { // legit user object
 //                        player.putExtra(PlayerActivity.EXTRA_PLAYER, shot.user);
 //                    } else {
@@ -420,25 +427,27 @@ public class DribbbleShot extends Activity {
 //                        player.putExtra(PlayerActivity.EXTRA_PLAYER_NAME, shot.user.username);
 //                        player.putExtra(PlayerActivity.EXTRA_PLAYER_ID, shot.user.id);
 //                    }
-                    ActivityOptions options =
-                            ActivityOptions.makeSceneTransitionAnimation(DribbbleShot.this,
-                                    playerAvatar, getString(R.string.transition_player_avatar));
-                    startActivity(player, options.toBundle());
+                            ActivityOptions options =
+                                    ActivityOptions.makeSceneTransitionAnimation(DribbbleShot.this,
+                                            playerAvatar, getString(R.string.transition_player_avatar));
+                            startActivity(player, options.toBundle());
+                        }
+                    };
+                    playerAvatar.setOnClickListener(playerClick);
+                    playerName.setOnClickListener(playerClick);
+                    if (UpdatedAt != null) {
+                        shotTimeAgo.setText(DateUtils.getRelativeTimeSpanString(UpdatedAt.getTime(),
+                                System.currentTimeMillis(),
+                                DateUtils.SECOND_IN_MILLIS)
+                                .toString().toLowerCase());
+                    }
+                } else {
+                    playerName.setVisibility(View.GONE);
+                    playerAvatar.setVisibility(View.GONE);
+                    shotTimeAgo.setVisibility(View.GONE);
                 }
-            };
-            playerAvatar.setOnClickListener(playerClick);
-            playerName.setOnClickListener(playerClick);
-            if (UpdatedAt != null) {
-                shotTimeAgo.setText(DateUtils.getRelativeTimeSpanString(UpdatedAt.getTime(),
-                        System.currentTimeMillis(),
-                        DateUtils.SECOND_IN_MILLIS)
-                        .toString().toLowerCase());
-            }
-        } else {
-            playerName.setVisibility(View.GONE);
-            playerAvatar.setVisibility(View.GONE);
-            shotTimeAgo.setVisibility(View.GONE);
-        }
+
+
 
         if (shot.comments_count > 0) {
             loadComments();

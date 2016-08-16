@@ -106,22 +106,22 @@ public class PlayerActivity extends Activity {
         chromeFader = new ElasticDragDismissFrameLayout.SystemChromeFader(this);
         bindPlayer();
         final Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_PLAYER)) {
-            player = intent.getParcelableExtra(EXTRA_PLAYER);
-            bindPlayer();
-        } else if (intent.hasExtra(EXTRA_PLAYER_NAME)) {
-            String name = intent.getStringExtra(EXTRA_PLAYER_NAME);
-            playerName.setText(name);
-            if (intent.hasExtra(EXTRA_PLAYER_ID)) {
-                long userId = intent.getLongExtra(EXTRA_PLAYER_ID, 0l);
-                loadPlayer(userId);
-            } else if (intent.hasExtra(EXTRA_PLAYER_USERNAME)) {
-                String username = intent.getStringExtra(EXTRA_PLAYER_USERNAME);
-                loadPlayer(username);
-            }
-        } else if (intent.getData() != null) {
-            // todo support url intents
-        }
+//        if (intent.hasExtra(EXTRA_PLAYER)) {
+//            player = intent.getParcelableExtra(EXTRA_PLAYER);
+//            bindPlayer();
+//        } else if (intent.hasExtra(EXTRA_PLAYER_NAME)) {
+//            String name = intent.getStringExtra(EXTRA_PLAYER_NAME);
+//            playerName.setText(name);
+//            if (intent.hasExtra(EXTRA_PLAYER_ID)) {
+//                long userId = intent.getLongExtra(EXTRA_PLAYER_ID, 0l);
+//                loadPlayer(userId);
+//            } else if (intent.hasExtra(EXTRA_PLAYER_USERNAME)) {
+//                String username = intent.getStringExtra(EXTRA_PLAYER_USERNAME);
+//                loadPlayer(username);
+//            }
+//        } else if (intent.getData() != null) {
+//            // todo support url intents
+//        }
 
         // setup immersive mode i.e. draw behind the system chrome & adjust insets
         draggableFrame.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -172,7 +172,7 @@ public class PlayerActivity extends Activity {
         final NumberFormat nf = NumberFormat.getInstance();
 
         Glide.with(this)
-                .load(AVUser.getCurrentUser().getString(UserDAO.AVATRR_URL))
+                .load(AVUser.getCurrentUser().getString(UserDAO.AVATAR_URL))
                 .placeholder(R.drawable.avatar_placeholder)
                 .transform(circleTransform)
                 .into(avatar);

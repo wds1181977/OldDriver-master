@@ -11,11 +11,14 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVStatus;
+import com.avos.avoscloud.AVStatusQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.search.AVSearchQuery;
+import com.olddriver.data.api.dribbble.ShotDAO;
 import com.olddriver.data.api.dribbble.UserDAO;
 import com.olddriver.data.api.dribbble.model.Images;
 import com.olddriver.data.api.dribbble.model.Shot;
@@ -59,6 +62,15 @@ public class AVService {
         shot.fetchInBackground(getCallback);
     }
 
+
+    public static void fetchAVUserById(String objectId,GetCallback<AVObject> getCallback) {
+        AVUser user = new AVUser();
+        user.setObjectId(objectId);
+        // 通过Fetch获取content内容
+        user.fetchInBackground(getCallback);
+    }
+
+
     public static void createOrUpdateShot(final String title,final String  githubUrl,final String  description, final String image_uri, final SaveCallback saveCallback) {
 
 
@@ -86,17 +98,21 @@ public class AVService {
 
     public static void saveShot(final String title,final String githubUrl,final String description,final String image_url, final SaveCallback saveCallback) {
         final Shot shot = new Shot();
-
+        String avatar=AVUser.getCurrentUser().getString(UserDAO.AVATAR_URL);
+        String username=AVUser.getCurrentUser().getUsername();
+        shot.setUserAvatar(avatar);
+        shot.setUserName(username);
         shot.setTitle(title);
         shot.setGitHubUrl(githubUrl);
         shot.setDescription(description);
         shot.setImageURL(image_url);
-
 //        Map<String, Object> datas = new HashMap<String, Object>();
 //        datas.put(App.DETAIL_ID, shot.getObjectId());
 //        shot.setData(datas);
         // 异步保存
         shot.saveInBackground(saveCallback);
+       // AVStatus.sendStatusToFollowersInBackgroud(shot, saveCallback);
+
     }
 
     public static List<Shot> findShots() {
@@ -112,6 +128,24 @@ public class AVService {
             Log.e("tag", "Query todos failed.", exception);
             return Collections.emptyList();
         }
+    }
+
+    public static List<AVStatus> findShots2() {
+        AVUser user = AVUser.getCurrentUser();
+
+        AVStatusQuery query = AVStatus.inboxQuery(user, AVStatus.INBOX_TYPE.TIMELINE.toString());
+
+        // 最大返回1000条
+        query.limit(15);
+        query.setMaxId(15);
+        query.orderByDescending("updatedAt");
+        try {
+           return  query.find();
+        } catch (AVException exception) {
+            Log.e("tag", "Query todos failed.", exception);
+            return Collections.emptyList();
+        }
+
     }
 
     public static void searchQuery(String inputSearch) {
@@ -171,7 +205,7 @@ public class AVService {
                         }
                         user.put(UserDAO.LOCATION,cityStr);
                         user.put(UserDAO.GITHUB_URL,githubStr);
-                        user.put(UserDAO.AVATRR_URL, file.getUrl());
+                        user.put(UserDAO.AVATAR_URL, file.getUrl());
                         user.saveInBackground(saveCallback);
                     }
                 }
